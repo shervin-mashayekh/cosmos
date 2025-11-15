@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmos - Engineer Your Brand Cosmos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #080808;
+      color: #fafafa;
+      overflow-x: hidden;
+    }
+
+    /* Grid Background */
+    .grid-background {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .grid-vertical {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 120px 120px;
+    }
+
+    .grid-horizontal {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 120px 120px;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent, transparent, #080808);
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(38, 38, 38, 0.5);
+      backdrop-filter: blur(16px);
+      background-color: rgba(8, 8, 8, 0.8);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: #00d9ff;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 10px #00d9ff; }
+      50% { box-shadow: 0 0 20px #00d9ff, 0 0 30px #00d9ff; }
+    }
+
+    .nav-brand {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #fafafa;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      color: #999;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #fafafa;
+    }
+
+    /* Main Content */
+    main {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (min-width: 1024px) {
+      .grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .content {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 1024px) {
+      h1 {
+        font-size: 4.5rem;
+      }
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: #999;
+    }
+
+    @media (min-width: 1024px) {
+      .subtitle {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* 3D Scene Container */
+    .scene-container {
+      position: relative;
+      height: 600px;
+    }
+
+    @media (min-width: 1024px) {
+      .scene-container {
+        height: 700px;
+      }
+    }
+
+    #canvas-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-background">
+    <div class="grid-vertical"></div>
+    <div class="grid-horizontal"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <div class="nav-dot"></div>
+        <span class="nav-brand">Cosmos</span>
+      </div>
+      <div class="nav-links">
+        <a href="#cosmos-development">Cosmos Development</a>
+        <a href="#story">Story</a>
+        <a href="#contact">Contact Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      <div class="grid-layout">
+        <div class="content">
+          <h1>Engineer Your Brand Cosmos</h1>
+          <p class="subtitle">Transform insights into cosmic strategy</p>
+        </div>
+
+        <div class="scene-container">
+          <div id="canvas-container"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r169/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/examples/js/loaders/OBJLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/examples/js/loaders/MTLLoader.js"></script>
+  <script>
+    // Three.js Scene Setup
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(0, 0, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // Point lights for lava effect
+    const pointLight1 = new THREE.PointLight(0xff4500, 2, 10);
+    pointLight1.position.set(0, 0, 0);
+    group.add(pointLight1);
+
+    const pointLight2 = new THREE.PointLight(0xff6b00, 1, 8);
+    pointLight2.position.set(3, 3, 3);
+    group.add(pointLight2);
+
+    const pointLight3 = new THREE.PointLight(0xffd700, 1, 8);
+    pointLight3.position.set(-3, -3, -3);
+    group.add(pointLight3);
+
+    // Load 3D Model
+    const mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath('/models/');
+    
+    mtlLoader.load('Lava_Planet_2.mtl', function(materials) {
+      materials.preload();
+      
+      const objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.setPath('/models/');
+      
+      objLoader.load('Lava_Planet_2.obj', function(object) {
+        object.scale.set(0.01, 0.01, 0.01);
+        
+        const box = new THREE.Box3().setFromObject(object);
+        const center = box.getCenter(new THREE.Vector3());
+        object.position.sub(center);
+        
+        object.traverse(function(child) {
+          if (child instanceof THREE.Mesh) {
+            const material = child.material;
+            if (material.map) {
+              material.emissive = new THREE.Color(0xff4500);
+              material.emissiveIntensity = 0.5;
+              material.shininess = 30;
+            }
+          }
+        });
+        
+        group.add(object);
+      });
+    });
+
+    // Auto-rotation controls
+    let autoRotate = true;
+    let mouseDown = false;
+    let mouseX = 0;
+    let mouseY = 0;
+
+    container.addEventListener('mousedown', function(e) {
+      mouseDown = true;
+      autoRotate = false;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    document.addEventListener('mouseup', function() {
+      mouseDown = false;
+      setTimeout(function() { autoRotate = true; }, 2000);
+    });
+
+    container.addEventListener('mousemove', function(e) {
+      if (mouseDown) {
+        const deltaX = e.clientX - mouseX;
+        const deltaY = e.clientY - mouseY;
+        
+        group.rotation.y += deltaX * 0.005;
+        group.rotation.x += deltaY * 0.005;
+        
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }
+    });
+
+    // Animation Loop
+    const clock = new THREE.Clock();
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const elapsedTime = clock.getElapsedTime();
+      
+      if (autoRotate) {
+        group.rotation.y = elapsedTime * 0.2;
+        group.rotation.x = Math.sin(elapsedTime * 0.1) * 0.1;
+      }
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
+</body>
+</html>
