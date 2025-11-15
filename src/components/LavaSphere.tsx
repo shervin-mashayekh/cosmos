@@ -1,10 +1,15 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 export const LavaSphere = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
+  
+  // Load the GLB model
+  const { scene } = useGLTF('/models/planet.glb');
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
 
   // Custom shader for animated lava effect
   const shaderMaterial = useMemo(() => {
@@ -78,12 +83,11 @@ export const LavaSphere = () => {
           vNormal = normalize(normalMatrix * normal);
           vPosition = position;
           
-          // Create crystalline displacement
+          // Create subtle displacement
           float noise1 = snoise(position * 2.0 + time * 0.1);
           float noise2 = snoise(position * 4.0 - time * 0.15);
-          float noise3 = snoise(position * 8.0 + time * 0.05);
           
-          float displacement = (noise1 * 0.3 + noise2 * 0.2 + noise3 * 0.1) * 0.15;
+          float displacement = (noise1 * 0.2 + noise2 * 0.1) * 0.08;
           
           vec3 newPosition = position + normal * displacement;
           
@@ -181,51 +185,59 @@ export const LavaSphere = () => {
     });
   }, []);
 
+  // Apply shader material to all meshes in the model
+  useMemo(() => {
+    clonedScene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.material = shaderMaterial;
+      }
+    });
+  }, [clonedScene, shaderMaterial]);
+
   useFrame((state) => {
     if (materialRef.current) {
       materialRef.current.uniforms.time.value = state.clock.getElapsedTime();
     }
-    if (meshRef.current) {
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
-      meshRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.1) * 0.1;
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+      groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.1) * 0.1;
     }
   });
 
   return (
-    <group>
+    <group ref={groupRef} scale={[2.5, 2.5, 2.5]}>
       {/* Main lava planet with custom shader */}
-      <mesh ref={meshRef} scale={[2.5, 2.5, 2.5]}>
-        <icosahedronGeometry args={[1, 32]} />
-        <primitive object={shaderMaterial} ref={materialRef} attach="material" />
-      </mesh>
+      <primitive object={clonedScene} />
+      <primitive object={shaderMaterial} ref={materialRef} attach="material" visible={false} />
+
 
       {/* Inner glow */}
-      <mesh scale={[2.2, 2.2, 2.2]}>
+      <mesh scale={[1.2, 1.2, 1.2]}>
         <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial
           color="#ff4500"
           transparent
-          opacity={0.4}
+          opacity={0.3}
         />
       </mesh>
 
       {/* Mid atmospheric glow */}
-      <mesh scale={[2.8, 2.8, 2.8]}>
+      <mesh scale={[1.5, 1.5, 1.5]}>
         <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial
           color="#ff8c00"
           transparent
-          opacity={0.2}
+          opacity={0.15}
         />
       </mesh>
 
       {/* Outer rim glow */}
-      <mesh scale={[3.2, 3.2, 3.2]}>
+      <mesh scale={[1.8, 1.8, 1.8]}>
         <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial
           color="#ffd700"
           transparent
-          opacity={0.1}
+          opacity={0.08}
           side={THREE.BackSide}
         />
       </mesh>
@@ -238,3 +250,5 @@ export const LavaSphere = () => {
     </group>
   );
 };
+
+useGLTF.preload('/models/planet.glb');
