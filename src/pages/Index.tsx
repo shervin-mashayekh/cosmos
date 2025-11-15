@@ -16,7 +16,7 @@ const Index = () => {
             <div className="space-y-8 animate-fade-in">
               <div className="space-y-4">
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                  An online brand guidelines platform
+                  Engineer Your Brand Cosmos
                 </h1>
                 <p className="text-xl lg:text-2xl text-muted-foreground">
                   for branding teams
