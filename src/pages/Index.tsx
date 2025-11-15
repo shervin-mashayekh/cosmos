@@ -19,7 +19,7 @@ const Index = () => {
                   Engineer Your Brand Cosmos
                 </h1>
                 <p className="text-xl lg:text-2xl text-muted-foreground">
-                  for branding teams
+                  Transform insights into cosmic strategy
                 </p>
               </div>
 
