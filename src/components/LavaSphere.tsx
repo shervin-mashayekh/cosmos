@@ -1,45 +1,32 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
 export const LavaSphere = () => {
   const groupRef = useRef<THREE.Group>(null);
-  const [model, setModel] = useState<THREE.Group | null>(null);
-
-  // Load the OBJ model
-  useEffect(() => {
-    const loader = new OBJLoader();
-    loader.load(
-      '/models/lava1.obj',
-      (object) => {
-        // Scale the model appropriately
-        object.scale.set(2.5, 2.5, 2.5);
-        
-        // Apply lava material to all meshes in the model
-        object.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            // Create a custom material for the cracked lava effect
-            child.material = new THREE.MeshStandardMaterial({
-              color: new THREE.Color('#1a0a00'), // Very dark base for cracks
-              emissive: new THREE.Color('#ff4500'), // Bright orange-red glow
-              emissiveIntensity: 1.2,
-              roughness: 0.8,
-              metalness: 0.2,
-            });
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-        });
-        
-        setModel(object);
-      },
-      undefined,
-      (error) => {
-        console.error('Error loading OBJ model:', error);
-      }
-    );
-  }, []);
+  
+  // Load the GLB model using drei's useGLTF hook
+  const { scene } = useGLTF('/models/lava1.glb');
+  
+  // Clone the scene and apply lava material
+  const clonedScene = scene.clone();
+  
+  // Apply lava material to all meshes
+  clonedScene.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      // Create a custom material for the cracked lava effect
+      child.material = new THREE.MeshStandardMaterial({
+        color: new THREE.Color('#1a0a00'), // Very dark base for cracks
+        emissive: new THREE.Color('#ff4500'), // Bright orange-red glow
+        emissiveIntensity: 1.5,
+        roughness: 0.8,
+        metalness: 0.2,
+      });
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
 
   useFrame((state) => {
     if (groupRef.current) {
@@ -50,8 +37,8 @@ export const LavaSphere = () => {
   });
 
   return (
-    <group ref={groupRef}>
-      {model && <primitive object={model.clone()} />}
+    <group ref={groupRef} scale={[2.5, 2.5, 2.5]}>
+      <primitive object={clonedScene} />
       
       {/* Inner bright glow sphere - matches reference image */}
       <mesh scale={[2.3, 2.3, 2.3]}>
@@ -97,3 +84,6 @@ export const LavaSphere = () => {
     </group>
   );
 };
+
+// Preload the model
+useGLTF.preload('/models/lava1.glb');
