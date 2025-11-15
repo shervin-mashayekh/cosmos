@@ -1,6 +1,5 @@
 import { Navigation } from "@/components/Navigation";
 import { Scene3D } from "@/components/Scene3D";
-import { FloatingBadge } from "@/components/FloatingBadge";
 import { GridBackground } from "@/components/GridBackground";
 import { Button } from "@/components/ui/button";
 
@@ -50,23 +49,6 @@ const Index = () => {
             {/* Right content - 3D Scene */}
             <div className="relative h-[600px] lg:h-[700px]">
               <Scene3D />
-              
-              {/* Floating badges */}
-              <FloatingBadge 
-                text="Chief Brand Officer" 
-                position="top-12 left-12 bg-primary/10 text-primary border-primary/30"
-                delay={0}
-              />
-              <FloatingBadge 
-                text="Designer" 
-                position="top-32 right-20 bg-lava-yellow/10 text-lava-yellow border-lava-yellow/30"
-                delay={0.2}
-              />
-              <FloatingBadge 
-                text="New partner" 
-                position="bottom-32 left-20 bg-secondary/10 text-secondary border-secondary/30"
-                delay={0.4}
-              />
             </div>
           </div>
         </div>
