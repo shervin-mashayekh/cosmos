@@ -1,6 +1,4 @@
 import { Navigation } from "@/components/Navigation";
-import { Scene3D } from "@/components/Scene3D";
-import { FloatingBadge } from "@/components/FloatingBadge";
 import { GridBackground } from "@/components/GridBackground";
 import { Button } from "@/components/ui/button";
 
@@ -12,9 +10,8 @@ const Index = () => {
       
       <main className="relative min-h-screen flex items-center justify-center">
         <div className="container mx-auto px-6 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left content */}
-            <div className="space-y-8 animate-fade-in">
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-8 animate-fade-in text-center">
               <div className="space-y-4">
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
                   An online brand guidelines platform
@@ -24,11 +21,11 @@ const Index = () => {
                 </p>
               </div>
 
-              <p className="text-lg text-muted-foreground max-w-lg">
+              <p className="text-lg text-muted-foreground max-w-lg mx-auto">
                 Your brand estate—sorted
               </p>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4 justify-center">
                 <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
                   Try now
                 </Button>
@@ -37,7 +34,7 @@ const Index = () => {
                 </Button>
               </div>
 
-              <div className="flex items-center gap-6 pt-8">
+              <div className="flex items-center gap-6 pt-8 justify-center">
                 <span className="text-sm text-muted-foreground">Choice of</span>
                 <div className="flex gap-4 opacity-60">
                   <div className="h-8 w-20 bg-muted rounded" />
@@ -45,28 +42,6 @@ const Index = () => {
                   <div className="h-8 w-20 bg-muted rounded" />
                 </div>
               </div>
-            </div>
-
-            {/* Right content - 3D Scene */}
-            <div className="relative h-[600px] lg:h-[700px]">
-              <Scene3D />
-              
-              {/* Floating badges */}
-              <FloatingBadge 
-                text="Chief Brand Officer" 
-                position="top-12 left-12 bg-primary/10 text-primary border-primary/30"
-                delay={0}
-              />
-              <FloatingBadge 
-                text="Designer" 
-                position="top-32 right-20 bg-lava-yellow/10 text-lava-yellow border-lava-yellow/30"
-                delay={0.2}
-              />
-              <FloatingBadge 
-                text="New partner" 
-                position="bottom-32 left-20 bg-secondary/10 text-secondary border-secondary/30"
-                delay={0.4}
-              />
             </div>
           </div>
         </div>
