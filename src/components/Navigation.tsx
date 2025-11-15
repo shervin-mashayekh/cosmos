@@ -7,7 +7,7 @@ export const Navigation = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary animate-glow" />
-            <span className="text-xl font-bold text-foreground">LavaSphere</span>
+            <span className="text-xl font-bold text-foreground">Cosmos</span>
           </div>
           
           <div className="hidden md:flex items-center gap-8">
@@ -20,15 +20,6 @@ export const Navigation = () => {
             <a href="#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Contact Us
             </a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="text-foreground hover:text-primary">
-              Sign in
-            </Button>
-            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Get Started
-            </Button>
           </div>
         </div>
       </div>
