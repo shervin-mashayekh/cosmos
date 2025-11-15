@@ -11,14 +11,14 @@ export const Navigation = () => {
           </div>
           
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Features
+            <a href="#cosmos-development" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Cosmos Development
             </a>
-            <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              About
+            <a href="#story" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Story
             </a>
-            <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Pricing
+            <a href="#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Contact Us
             </a>
           </div>
 
