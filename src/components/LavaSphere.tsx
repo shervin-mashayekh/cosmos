@@ -57,39 +57,10 @@ export const LavaSphere = () => {
 
   return (
     <group ref={groupRef}>
-      {/* Atmospheric glow layers */}
-      <mesh scale={[1.8, 1.8, 1.8]}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshBasicMaterial
-          color="#ff4500"
-          transparent
-          opacity={0.2}
-        />
-      </mesh>
-
-      <mesh scale={[2.2, 2.2, 2.2]}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshBasicMaterial
-          color="#ff8c00"
-          transparent
-          opacity={0.1}
-        />
-      </mesh>
-
-      <mesh scale={[2.6, 2.6, 2.6]}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshBasicMaterial
-          color="#ffd700"
-          transparent
-          opacity={0.05}
-          side={THREE.BackSide}
-        />
-      </mesh>
-
       {/* Lighting */}
-      <pointLight position={[0, 0, 0]} intensity={3} color="#ff4500" distance={10} />
-      <pointLight position={[3, 3, 3]} intensity={1.5} color="#ff6b00" distance={8} />
-      <pointLight position={[-3, -3, -3]} intensity={1.5} color="#ffd700" distance={8} />
+      <pointLight position={[0, 0, 0]} intensity={2} color="#ff4500" distance={10} />
+      <pointLight position={[3, 3, 3]} intensity={1} color="#ff6b00" distance={8} />
+      <pointLight position={[-3, -3, -3]} intensity={1} color="#ffd700" distance={8} />
     </group>
   );
 };
