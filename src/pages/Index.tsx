@@ -2,10 +2,8 @@ import { Navigation } from "@/components/Navigation";
 import { Scene3D } from "@/components/Scene3D";
 import { GridBackground } from "@/components/GridBackground";
 import { Button } from "@/components/ui/button";
-
 const Index = () => {
-  return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
+  return <div className="relative min-h-screen bg-background overflow-hidden">
       <GridBackground />
       <Navigation />
       
@@ -23,9 +21,7 @@ const Index = () => {
                 </p>
               </div>
 
-              <p className="text-lg text-muted-foreground max-w-lg">
-                Your brand estate—sorted
-              </p>
+              
             </div>
 
             {/* Right content - 3D Scene */}
@@ -35,8 +31,6 @@ const Index = () => {
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
