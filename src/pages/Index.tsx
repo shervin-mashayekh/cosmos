@@ -26,24 +26,6 @@ const Index = () => {
               <p className="text-lg text-muted-foreground max-w-lg">
                 Your brand estate—sorted
               </p>
-
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
-                  Try now
-                </Button>
-                <Button size="lg" variant="outline" className="border-border hover:bg-muted">
-                  Book a Demo
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-6 pt-8">
-                <span className="text-sm text-muted-foreground">Choice of</span>
-                <div className="flex gap-4 opacity-60">
-                  <div className="h-8 w-20 bg-muted rounded" />
-                  <div className="h-8 w-20 bg-muted rounded" />
-                  <div className="h-8 w-20 bg-muted rounded" />
-                </div>
-              </div>
             </div>
 
             {/* Right content - 3D Scene */}
