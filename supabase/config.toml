@@ -1,0 +1,4 @@
+project_id = "swyxyduxoskwfismtbph"
+
+[functions.analyze-cosmos]
+verify_jwt = false
