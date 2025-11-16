@@ -21,7 +21,9 @@ const Index = () => {
                 </p>
               </div>
 
-              
+              <Button size="lg" className="text-lg px-8 py-6">
+                Cosmos Development
+              </Button>
             </div>
 
             {/* Right content - 3D Scene */}
