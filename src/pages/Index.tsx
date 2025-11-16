@@ -22,8 +22,8 @@ const Index = () => {
         <div className="relative z-20 container mx-auto px-6 py-20">
           <div className="max-w-2xl space-y-8 animate-fade-in">
             <div className="space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
-                Engineer Your Brand Cosmos
+              <h1 className="text-[2.8rem] font-bold leading-tight">
+                Engineer Your<br />Brand Cosmos
               </h1>
               <p className="text-lg lg:text-xl text-muted-foreground">
                 Transform insights into cosmic strategy
