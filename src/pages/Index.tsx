@@ -16,7 +16,7 @@ const Index = () => {
         </div>
 
         {/* Blurred overlay covering left half */}
-        <div className="absolute inset-y-0 left-0 w-1/2 backdrop-blur-3xl bg-background/30 z-10" />
+        <div className="absolute inset-y-0 left-0 w-1/2 backdrop-blur-xl bg-background/30 z-10" />
 
         {/* Content over the overlay */}
         <div className="relative z-20 container mx-auto px-6 py-20">
