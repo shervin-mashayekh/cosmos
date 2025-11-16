@@ -48,7 +48,7 @@ All colors MUST be HSL.
     --glass-border: 0 0% 100% / 0.1;
     
     /* Grid */
-    --grid-color: 0 0% 100% / 0.03;
+    --grid-color: 0 0% 100% / 0.08;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 90%;
