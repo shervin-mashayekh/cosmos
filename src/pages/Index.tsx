@@ -8,28 +8,31 @@ const Index = () => {
       <Navigation />
       
       <main className="relative min-h-screen flex items-center justify-center">
-        <div className="container mx-auto px-6 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left content */}
-            <div className="space-y-8 animate-fade-in">
-              <div className="space-y-4">
-                <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                  Engineer Your Brand Cosmos
-                </h1>
-                <p className="text-xl lg:text-2xl text-muted-foreground">
-                  Transform insights into cosmic strategy
-                </p>
-              </div>
+        {/* 3D Scene - Full screen centered */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-full h-full max-w-[800px]">
+            <Scene3D />
+          </div>
+        </div>
 
-              <Button size="lg" className="text-lg px-8 py-6">
-                Cosmos Development
-              </Button>
+        {/* Blurred overlay covering left half */}
+        <div className="absolute inset-y-0 left-0 w-1/2 backdrop-blur-3xl bg-background/60 z-10" />
+
+        {/* Content over the overlay */}
+        <div className="relative z-20 container mx-auto px-6 py-20">
+          <div className="max-w-2xl space-y-8 animate-fade-in">
+            <div className="space-y-4">
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+                Engineer Your Brand Cosmos
+              </h1>
+              <p className="text-xl lg:text-2xl text-muted-foreground">
+                Transform insights into cosmic strategy
+              </p>
             </div>
 
-            {/* Right content - 3D Scene */}
-            <div className="relative h-[600px] lg:h-[700px]">
-              <Scene3D />
-            </div>
+            <Button size="lg" className="text-lg px-8 py-6">
+              Cosmos Development
+            </Button>
           </div>
         </div>
       </main>
