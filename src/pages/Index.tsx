@@ -12,40 +12,72 @@ import { Plus, X } from "lucide-react";
 const Index = () => {
   const [conflict, setConflict] = useState("");
   const [submittedConflict, setSubmittedConflict] = useState("");
-  const [homelandReplies, setHomelandReplies] = useState([""]);
-  const [hierarchyReplies, setHierarchyReplies] = useState([""]);
-  const [habitatReplies, setHabitatReplies] = useState([""]);
+  
+  // Initialize state for each question with empty reply arrays
+  const [homelandReplies, setHomelandReplies] = useState<string[][]>(
+    Array(15).fill(null).map(() => [""])
+  );
+  const [hierarchyReplies, setHierarchyReplies] = useState<string[][]>(
+    Array(9).fill(null).map(() => [""])
+  );
+  const [habitatReplies, setHabitatReplies] = useState<string[][]>(
+    Array(13).fill(null).map(() => [""])
+  );
 
   const handleSubmitConflict = () => {
     setSubmittedConflict(conflict);
   };
 
-  const addReply = (section: 'homeland' | 'hierarchy' | 'habitat') => {
-    if (section === 'homeland') setHomelandReplies([...homelandReplies, ""]);
-    if (section === 'hierarchy') setHierarchyReplies([...hierarchyReplies, ""]);
-    if (section === 'habitat') setHabitatReplies([...habitatReplies, ""]);
-  };
-
-  const removeReply = (section: 'homeland' | 'hierarchy' | 'habitat', index: number) => {
-    if (section === 'homeland') setHomelandReplies(homelandReplies.filter((_, i) => i !== index));
-    if (section === 'hierarchy') setHierarchyReplies(hierarchyReplies.filter((_, i) => i !== index));
-    if (section === 'habitat') setHabitatReplies(habitatReplies.filter((_, i) => i !== index));
-  };
-
-  const updateReply = (section: 'homeland' | 'hierarchy' | 'habitat', index: number, value: string) => {
+  const addReply = (section: 'homeland' | 'hierarchy' | 'habitat', questionIndex: number) => {
     if (section === 'homeland') {
       const updated = [...homelandReplies];
-      updated[index] = value;
+      updated[questionIndex] = [...updated[questionIndex], ""];
       setHomelandReplies(updated);
     }
     if (section === 'hierarchy') {
       const updated = [...hierarchyReplies];
-      updated[index] = value;
+      updated[questionIndex] = [...updated[questionIndex], ""];
       setHierarchyReplies(updated);
     }
     if (section === 'habitat') {
       const updated = [...habitatReplies];
-      updated[index] = value;
+      updated[questionIndex] = [...updated[questionIndex], ""];
+      setHabitatReplies(updated);
+    }
+  };
+
+  const removeReply = (section: 'homeland' | 'hierarchy' | 'habitat', questionIndex: number, replyIndex: number) => {
+    if (section === 'homeland') {
+      const updated = [...homelandReplies];
+      updated[questionIndex] = updated[questionIndex].filter((_, i) => i !== replyIndex);
+      setHomelandReplies(updated);
+    }
+    if (section === 'hierarchy') {
+      const updated = [...hierarchyReplies];
+      updated[questionIndex] = updated[questionIndex].filter((_, i) => i !== replyIndex);
+      setHierarchyReplies(updated);
+    }
+    if (section === 'habitat') {
+      const updated = [...habitatReplies];
+      updated[questionIndex] = updated[questionIndex].filter((_, i) => i !== replyIndex);
+      setHabitatReplies(updated);
+    }
+  };
+
+  const updateReply = (section: 'homeland' | 'hierarchy' | 'habitat', questionIndex: number, replyIndex: number, value: string) => {
+    if (section === 'homeland') {
+      const updated = [...homelandReplies];
+      updated[questionIndex][replyIndex] = value;
+      setHomelandReplies(updated);
+    }
+    if (section === 'hierarchy') {
+      const updated = [...hierarchyReplies];
+      updated[questionIndex][replyIndex] = value;
+      setHierarchyReplies(updated);
+    }
+    if (section === 'habitat') {
+      const updated = [...habitatReplies];
+      updated[questionIndex][replyIndex] = value;
       setHabitatReplies(updated);
     }
   };
@@ -81,9 +113,12 @@ const Index = () => {
       {/* Understand The Core Concepts Section */}
       <section className="relative py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl font-bold text-center mb-16">
+          <h2 className="text-4xl font-bold text-center mb-6">
             Understand The Core Concepts
           </h2>
+          <p className="text-center text-muted-foreground max-w-4xl mx-auto mb-16 text-lg leading-relaxed">
+            Before answering questions to build your cosmos and developing a universe, read these definitions. It is important for you to understand these terminologies since they might seem familiar but they have a different meaning in this context. These words will be used in questions and understanding them would help you to better answer questions and to have a more detailed cosmos.
+          </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="p-6 bg-card/50 backdrop-blur border-border hover:border-primary/50 transition-all">
@@ -133,10 +168,13 @@ const Index = () => {
 
           {/* Add The Conflict */}
           <Card className="p-8 bg-card/50 backdrop-blur border-border mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-2xl font-bold mb-4">Add The Conflict</h3>
+                  <h3 className="text-2xl font-bold mb-2">Add The Conflict</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Define the core conflict of your brand cosmos. What is the central struggle or tension?
+                  </p>
                   <Textarea
                     placeholder="Describe the central conflict of your cosmos..."
                     className="min-h-[120px] bg-background/50"
@@ -178,38 +216,58 @@ const Index = () => {
                 Homeland
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Where do they live? (brief high-level description)</label>
-                  {homelandReplies.map((reply, index) => (
-                    <div key={index} className="space-y-2">
-                      <Textarea
-                        placeholder="Describe the homeland..."
-                        className="min-h-[100px] bg-background/50"
-                        value={reply}
-                        onChange={(e) => updateReply('homeland', index, e.target.value)}
-                      />
-                      {index > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeReply('homeland', index)}
-                          className="text-destructive"
-                        >
-                          <X className="w-4 h-4 mr-2" />
-                          Remove
-                        </Button>
-                      )}
+                <div className="space-y-6">
+                  {[
+                    "What does your brand stand for? What is it that you want to achieve that is aligned with your audience's wants and values?",
+                    "Who is the antagonist? (Think about norms, beliefs, cultural or political stances you want to change)",
+                    "What are the antagonist's agendas? What do they see as good and evil?",
+                    "What is it that you want to change in the outside world?",
+                    "Why do conflicts persist or change in this world?",
+                    "What poses the greatest threat in this world? (This is something that has been part of everyone's life, it is easy to follow).",
+                    "What are the natural resources? Which ones are scarce?",
+                    "When were the key turning points in this world's history?",
+                    "Why would someone study this world's history, what would it teach them?",
+                    "What important inventions or advances have been made?",
+                    "How does this fight affect your audience? (If the status quo stays the same)",
+                    "What is the status quo your brand is challenging? (Common beliefs/ norms)",
+                    "What do people vote for by buying your product?/ What are they buying into? (Community? Value?)",
+                    "What is the risk of doing nothing for the future generation and the whole world (nature)? What if, the antagonist wins?",
+                    "What is the antagonist's magical power?"
+                  ].map((question, qIndex) => (
+                    <div key={qIndex} className="space-y-2">
+                      <label className="text-sm font-medium block">{question}</label>
+                      {homelandReplies[qIndex]?.map((reply, rIndex) => (
+                        <div key={rIndex} className="space-y-2">
+                          <Textarea
+                            placeholder="Your answer..."
+                            className="min-h-[100px] bg-background/50"
+                            value={reply}
+                            onChange={(e) => updateReply('homeland', qIndex, rIndex, e.target.value)}
+                          />
+                          {rIndex > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeReply('homeland', qIndex, rIndex)}
+                              className="text-destructive"
+                            >
+                              <X className="w-4 h-4 mr-2" />
+                              Remove
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addReply('homeland', qIndex)}
+                        className="w-full hover:bg-primary/10 hover:text-primary hover:border-primary"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Another Reply
+                      </Button>
                     </div>
                   ))}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => addReply('homeland')}
-                    className="w-full"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Another Reply
-                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -220,38 +278,52 @@ const Index = () => {
                 Hierarchy
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">What is the social structure?</label>
-                  {hierarchyReplies.map((reply, index) => (
-                    <div key={index} className="space-y-2">
-                      <Textarea
-                        placeholder="Describe the hierarchy..."
-                        className="min-h-[100px] bg-background/50"
-                        value={reply}
-                        onChange={(e) => updateReply('hierarchy', index, e.target.value)}
-                      />
-                      {index > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeReply('hierarchy', index)}
-                          className="text-destructive"
-                        >
-                          <X className="w-4 h-4 mr-2" />
-                          Remove
-                        </Button>
-                      )}
+                <div className="space-y-6">
+                  {[
+                    "List of all touch points- How much power do people have to personalize/alter/create within specific touch points? (Addressing the power/ passing the mic)",
+                    "How many levels are there in this society? What are they based on?",
+                    "How can people be part of this society (citizenship rules) and how do they get deported? What are rights and privileges?(Addressing the level and ease of access)",
+                    "If someone at the top changes, how might your audience relations change to the brand?",
+                    "What are the tools, spaces, and expertise you provide to support them?",
+                    "What can be a source of inequality? How is stratification created?",
+                    "How do people move between different classes? How difficult is it to rise or fall from one social level to another? How much social mobility is there? How much do people think there is?",
+                    "How would the world be different if they achieve their goals?",
+                    "What do they stand to lose?"
+                  ].map((question, qIndex) => (
+                    <div key={qIndex} className="space-y-2">
+                      <label className="text-sm font-medium block">{question}</label>
+                      {hierarchyReplies[qIndex]?.map((reply, rIndex) => (
+                        <div key={rIndex} className="space-y-2">
+                          <Textarea
+                            placeholder="Your answer..."
+                            className="min-h-[100px] bg-background/50"
+                            value={reply}
+                            onChange={(e) => updateReply('hierarchy', qIndex, rIndex, e.target.value)}
+                          />
+                          {rIndex > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeReply('hierarchy', qIndex, rIndex)}
+                              className="text-destructive"
+                            >
+                              <X className="w-4 h-4 mr-2" />
+                              Remove
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addReply('hierarchy', qIndex)}
+                        className="w-full hover:bg-primary/10 hover:text-primary hover:border-primary"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Another Reply
+                      </Button>
                     </div>
                   ))}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => addReply('hierarchy')}
-                    className="w-full"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Another Reply
-                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -262,38 +334,56 @@ const Index = () => {
                 Habitat
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">What is the environment like?</label>
-                  {habitatReplies.map((reply, index) => (
-                    <div key={index} className="space-y-2">
-                      <Textarea
-                        placeholder="Describe the habitat..."
-                        className="min-h-[100px] bg-background/50"
-                        value={reply}
-                        onChange={(e) => updateReply('habitat', index, e.target.value)}
-                      />
-                      {index > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeReply('habitat', index)}
-                          className="text-destructive"
-                        >
-                          <X className="w-4 h-4 mr-2" />
-                          Remove
-                        </Button>
-                      )}
+                <div className="space-y-6">
+                  {[
+                    "What would they do if they feel defeated? How do they cope? What motivates them to continue?",
+                    "How do you unite your community to fight against the antagonists?",
+                    "What are the educational resources you provide for the audience about your value/stand?",
+                    "How do you ensure that people from the other side do not infiltrate the community? How do you ensure your audience's safety?",
+                    "What kind of magical power do your audience get?",
+                    "Who can and who is allowed to use magic? Is magic inherited, gifted, obtained or learned?",
+                    "Are there any hierarchies regarding the use/practice of magic?",
+                    "How can the audience practice magic? Is it collective or individual? Do you have rituals or events to make it more collective?",
+                    "What are the magical objects the audience and customers would get? (Think objects)",
+                    "How do you create a platform to ensure your audience feels useful and valued (others can depend on them)? How do you ensure the communication between them happens?",
+                    "What are the areas of conflict within the society and among the audience? How would they react in these instances?",
+                    "What are the social norms and rituals they practice?",
+                    "What are the shared language/words/objects they have that tie the audience together?"
+                  ].map((question, qIndex) => (
+                    <div key={qIndex} className="space-y-2">
+                      <label className="text-sm font-medium block">{question}</label>
+                      {habitatReplies[qIndex]?.map((reply, rIndex) => (
+                        <div key={rIndex} className="space-y-2">
+                          <Textarea
+                            placeholder="Your answer..."
+                            className="min-h-[100px] bg-background/50"
+                            value={reply}
+                            onChange={(e) => updateReply('habitat', qIndex, rIndex, e.target.value)}
+                          />
+                          {rIndex > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeReply('habitat', qIndex, rIndex)}
+                              className="text-destructive"
+                            >
+                              <X className="w-4 h-4 mr-2" />
+                              Remove
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addReply('habitat', qIndex)}
+                        className="w-full hover:bg-primary/10 hover:text-primary hover:border-primary"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Another Reply
+                      </Button>
                     </div>
                   ))}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => addReply('habitat')}
-                    className="w-full"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Another Reply
-                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
