@@ -168,7 +168,7 @@ const Index = () => {
 
           {/* Add The Conflict */}
           <Card className="p-8 bg-card/50 backdrop-blur border-border mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-[9fr_1fr] gap-8">
               <div className="space-y-6">
                 <div>
                   <h3 className="text-2xl font-bold mb-2">Add The Conflict</h3>
@@ -257,15 +257,13 @@ const Index = () => {
                           )}
                         </div>
                       ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <button
                         onClick={() => addReply('homeland', qIndex)}
-                        className="w-full hover:bg-primary/10 hover:text-primary hover:border-primary"
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer flex items-center gap-2"
                       >
-                        <Plus className="w-4 h-4 mr-2" />
+                        <Plus className="w-3 h-3" />
                         Add Another Reply
-                      </Button>
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -313,15 +311,13 @@ const Index = () => {
                           )}
                         </div>
                       ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <button
                         onClick={() => addReply('hierarchy', qIndex)}
-                        className="w-full hover:bg-primary/10 hover:text-primary hover:border-primary"
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer flex items-center gap-2"
                       >
-                        <Plus className="w-4 h-4 mr-2" />
+                        <Plus className="w-3 h-3" />
                         Add Another Reply
-                      </Button>
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -373,15 +369,13 @@ const Index = () => {
                           )}
                         </div>
                       ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <button
                         onClick={() => addReply('habitat', qIndex)}
-                        className="w-full hover:bg-primary/10 hover:text-primary hover:border-primary"
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer flex items-center gap-2"
                       >
-                        <Plus className="w-4 h-4 mr-2" />
+                        <Plus className="w-3 h-3" />
                         Add Another Reply
-                      </Button>
+                      </button>
                     </div>
                   ))}
                 </div>
