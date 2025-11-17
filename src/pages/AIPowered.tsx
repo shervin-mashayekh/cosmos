@@ -256,10 +256,10 @@ const AIPowered = () => {
           <div className="max-w-2xl space-y-8 animate-fade-in">
             <div className="space-y-4">
               <h1 className="text-[3.2rem] font-bold leading-tight">
-                AI-Powered<br />Cosmos Analysis
+                Engineer Your<br />Brand Cosmos
               </h1>
               <p className="text-lg lg:text-xl text-muted-foreground">
-                Harness AI to extract deep thematic insights from your cosmos
+                Transform insights into cosmic strategy
               </p>
             </div>
           </div>
@@ -384,7 +384,7 @@ const AIPowered = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => removeReply('homeland', qIndex, rIndex)}
-                              className="text-destructive"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                             >
                               <X className="w-4 h-4 mr-2" />
                               Remove
@@ -428,7 +428,7 @@ const AIPowered = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => removeReply('hierarchy', qIndex, rIndex)}
-                              className="text-destructive"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                             >
                               <X className="w-4 h-4 mr-2" />
                               Remove
@@ -472,7 +472,7 @@ const AIPowered = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => removeReply('habitat', qIndex, rIndex)}
-                              className="text-destructive"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                             >
                               <X className="w-4 h-4 mr-2" />
                               Remove
