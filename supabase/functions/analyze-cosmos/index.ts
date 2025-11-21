@@ -38,11 +38,10 @@ ${seedWords}
 
 Return your analysis as a JSON object with the following structure:
 {
-  "algorithm_flow": {
-    "protagonist": { "title": string, "analysis": string },
-    "antagonist": { "title": string, "analysis": string },
-    "magic": { "title": string, "analysis": string },
-    "society": { "title": string, "analysis": string }
+  "overarching_themes": {
+    "prevailing_myth": { "title": string, "analysis": string },
+    "underlying_drive": { "title": string, "analysis": string },
+    "core_belief_system": { "title": string, "analysis": string }
   },
   "category_themes": [
     {
@@ -54,11 +53,10 @@ Return your analysis as a JSON object with the following structure:
   ]
 }
 
-For the algorithm_flow:
-- Protagonist: Identify the collective hero (brand + audience) and their core moral value
-- Antagonist: Define the opposing ideology or societal norm being fought against
-- Magic: Describe the specific methodology or "how" the protagonist combats the antagonist
-- Society: Explain the self-contained brand world with its distinct rules and norms
+For overarching themes:
+- Prevailing Myth: The core narrative that defines the brand universe
+- Underlying Drive: The fundamental motivation that propels the brand forward
+- Core Belief System: The central values and principles that guide everything
 
 For category themes:
 - Title should be concise (2-5 words)
