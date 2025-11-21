@@ -31,20 +31,54 @@ interface AnalysisResult {
 
 const AIPowered = () => {
   const { toast } = useToast();
-  const [conflict, setConflict] = useState("");
-  const [submittedConflict, setSubmittedConflict] = useState("");
+  const [conflict, setConflict] = useState("Ordinary Limitations vs. Extraordinary Possibilities");
+  const [submittedConflict, setSubmittedConflict] = useState("Ordinary Limitations vs. Extraordinary Possibilities");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   
-  const [homelandReplies, setHomelandReplies] = useState<string[][]>(
-    Array(15).fill(null).map(() => [""])
-  );
-  const [hierarchyReplies, setHierarchyReplies] = useState<string[][]>(
-    Array(9).fill(null).map(() => [""])
-  );
-  const [habitatReplies, setHabitatReplies] = useState<string[][]>(
-    Array(13).fill(null).map(() => [""])
-  );
+  const [homelandReplies, setHomelandReplies] = useState<string[][]>([
+    ["Mental and physical limitations that hold people back from achieving their full potential"],
+    ["The darkness of mediocrity, fatigue, and self-doubt that prevents peak performance"],
+    ["The antagonist represents settling for ordinary, accepting limits, and living within safe boundaries"],
+    ["Red Bull fights for human potential, pushing boundaries, and achieving the impossible"],
+    ["We champion the light of peak performance, fearlessness, and living life at maximum intensity"],
+    ["Our protagonist embodies the worldview that limitations are meant to be broken and extraordinary is achievable"],
+    ["In 1987, Dietrich Matschitz discovered an energy drink in Thailand that helped him overcome jet lag, sparking the idea to bring enhanced human performance to the world"],
+    ["The struggle began when Red Bull challenged the status quo of what a beverage company could be - not just selling drinks but enabling extraordinary human achievement"],
+    ["We discovered our purpose by witnessing athletes, adventurers, and creators push beyond what was thought possible"],
+    ["This battle takes place at the edge of human capability - in extreme sports arenas, creative studios, competitive stages, and anywhere people dare to push limits"],
+    ["The arena is wherever ordinary meets extraordinary - from stratospheric jumps to underground music scenes, from racing circuits to cultural movements"],
+    ["Red Bull operates in contexts where performance matters, where stakes are high, and where the difference between ordinary and extraordinary is measured in moments"],
+    ["This conflict matters because human potential is unlimited, but self-imposed limitations hold civilization back from progress"],
+    ["What's at stake is whether humanity will continue pushing boundaries or settle into comfortable mediocrity"],
+    ["Without Red Bull, there would be less inspiration to attempt the impossible, fewer platforms for emerging talent, and a world with lower expectations of what humans can achieve"]
+  ]);
+  const [hierarchyReplies, setHierarchyReplies] = useState<string[][]>([
+    ["Our magic is the formula that gives you wings - the combination of ingredients that unlocks peak mental and physical performance exactly when you need it most"],
+    ["Red Bull possesses the power to transform ordinary moments into extraordinary opportunities through enhanced focus, energy, and reaction time"],
+    ["Our methodology combines functional benefits (the product), cultural amplification (events and content), and athlete partnerships to create a complete performance ecosystem"],
+    ["Our heroes are athletes, artists, creators, and adventurers who refuse to accept limits - Felix Baumgartner, Max Verstappen, street dancers, underground musicians"],
+    ["They play the role of inspirational figures who demonstrate what's possible when you push beyond perceived limits"],
+    ["They embody fearlessness, dedication to craft, innovation, and the relentless pursuit of excellence in their chosen fields"],
+    ["The guiding principles are: push boundaries, challenge convention, enable peak performance, celebrate those who dare, and make the impossible possible"],
+    ["The laws governing our world: energy must be earned through action, limits exist to be broken, performance is everything, and mediocrity is the only true failure"],
+    ["The beliefs that unite our community: human potential is unlimited, fear is meant to be conquered, and life is meant to be lived at full intensity"]
+  ]);
+  const [habitatReplies, setHabitatReplies] = useState<string[][]>([
+    ["The ritual of cracking open a Red Bull before a moment that demands peak performance - before competitions, creative sessions, long drives, or challenges"],
+    ["Our ceremonies include Red Bull events that bring together communities around extreme sports, music, gaming, and culture - from Air Race to BC One"],
+    ["Practices include following Red Bull athletes and events, participating in Red Bull competitions, and sharing moments of achievement with the community"],
+    ["The Red Bull can itself - sleek, silver and blue, instantly recognizable. The charging bulls logo. The tagline 'Gives You Wings'"],
+    ["Our icons include the charging bulls, the blue and silver color scheme, wings imagery, and the athletes who represent peak performance"],
+    ["Our visual language is high-energy, action-focused, with bold reds and blues, dynamic angles, and imagery that captures moments of extraordinary achievement"],
+    ["We tell stories of ordinary people and athletes achieving extraordinary feats - from stratospheric jumps to underdog victories to cultural breakthroughs"],
+    ["Our narratives shape the perception that limits are mental constructs and with the right mindset, preparation, and energy, anything is achievable"],
+    ["Legends like Baumgartner's space jump, Air Race victories, and countless athlete comebacks inspire others to attempt their own impossible"],
+    ["Our community gathers at Red Bull events worldwide, online through Red Bull Media House content, and at competitions across sports and culture"],
+    ["Believers congregate at extreme sports venues, music festivals, gaming tournaments, and anywhere people push limits"],
+    ["Spaces include Red Bull facilities like Hangar-7, sponsored events, media properties, and digital platforms that celebrate achievement"],
+    ["Membership transforms people from observers to participants - they go from watching the impossible to attempting it themselves, with Red Bull as their enabler"]
+  ]);
 
   const homelandQuestions = [
     "What does your brand stand for? What is it that you want to achieve that is aligned with your audience's wants and values?",
