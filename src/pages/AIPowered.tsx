@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { CosmosSolarSystem } from "@/components/CosmosSolarSystem";
 import { useState } from "react";
 import { Plus, X, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,11 +22,10 @@ interface CategoryTheme {
 }
 
 interface AnalysisResult {
-  algorithm_flow: {
-    protagonist: Theme;
-    antagonist: Theme;
-    magic: Theme;
-    society: Theme;
+  overarching_themes: {
+    prevailing_myth: Theme;
+    underlying_drive: Theme;
+    core_belief_system: Theme;
   };
   category_themes: CategoryTheme[];
 }
@@ -557,52 +557,51 @@ const AIPowered = () => {
               Your Cosmos Analysis
             </h2>
 
-            {/* The Algorithm Flow */}
+            {/* 3D Solar System Visualization */}
             <div className="mb-12">
-              <h3 className="text-2xl font-bold mb-6">The Algorithm Flow</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <h3 className="text-2xl font-bold mb-6">Cosmos Visualization</h3>
+              <p className="text-muted-foreground mb-6">
+                Explore your brand cosmos as a living solar system. The sun represents your Core Belief System, 
+                with themes orbiting as planets and sub-themes as moons.
+              </p>
+              <CosmosSolarSystem analysisResult={analysisResult} />
+            </div>
+
+            {/* Overarching Themes */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold mb-6">Overarching Themes</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="p-6 bg-card/50 backdrop-blur border-border">
                   <h4 className="text-lg font-bold mb-2 text-primary">
-                    Protagonist
+                    Prevailing Myth
                   </h4>
                   <h5 className="text-base font-semibold mb-2">
-                    {analysisResult.algorithm_flow.protagonist.title}
+                    {analysisResult.overarching_themes.prevailing_myth.title}
                   </h5>
                   <p className="text-sm text-muted-foreground">
-                    {analysisResult.algorithm_flow.protagonist.analysis}
+                    {analysisResult.overarching_themes.prevailing_myth.analysis}
                   </p>
                 </Card>
                 <Card className="p-6 bg-card/50 backdrop-blur border-border">
                   <h4 className="text-lg font-bold mb-2 text-primary">
-                    Antagonist
+                    Underlying Drive
                   </h4>
                   <h5 className="text-base font-semibold mb-2">
-                    {analysisResult.algorithm_flow.antagonist.title}
+                    {analysisResult.overarching_themes.underlying_drive.title}
                   </h5>
                   <p className="text-sm text-muted-foreground">
-                    {analysisResult.algorithm_flow.antagonist.analysis}
+                    {analysisResult.overarching_themes.underlying_drive.analysis}
                   </p>
                 </Card>
                 <Card className="p-6 bg-card/50 backdrop-blur border-border">
                   <h4 className="text-lg font-bold mb-2 text-primary">
-                    Magic
+                    Core Belief System
                   </h4>
                   <h5 className="text-base font-semibold mb-2">
-                    {analysisResult.algorithm_flow.magic.title}
+                    {analysisResult.overarching_themes.core_belief_system.title}
                   </h5>
                   <p className="text-sm text-muted-foreground">
-                    {analysisResult.algorithm_flow.magic.analysis}
-                  </p>
-                </Card>
-                <Card className="p-6 bg-card/50 backdrop-blur border-border">
-                  <h4 className="text-lg font-bold mb-2 text-primary">
-                    Society
-                  </h4>
-                  <h5 className="text-base font-semibold mb-2">
-                    {analysisResult.algorithm_flow.society.title}
-                  </h5>
-                  <p className="text-sm text-muted-foreground">
-                    {analysisResult.algorithm_flow.society.analysis}
+                    {analysisResult.overarching_themes.core_belief_system.analysis}
                   </p>
                 </Card>
               </div>
