@@ -143,23 +143,24 @@ const PlanetJourney = () => {
     if (!root) return;
 
     const handleScroll = () => {
-      const newProgress = sectionRefs.current.map((section, index) => {
+      const newProgress = sectionRefs.current.map((section) => {
         if (!section) return 0;
         
         const rect = section.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        
-        // Calculate how far into view the section is (0 to 1)
-        const sectionTop = rect.top;
         const sectionHeight = rect.height;
         
-        // Progress is 0 when section is below viewport, 1 when centered, 0 when above
-        let progress = 0;
-        if (sectionTop <= windowHeight / 2 && sectionTop >= -sectionHeight / 2) {
-          // Section is in the "active" zone
-          progress = 1 - Math.abs(sectionTop - windowHeight / 2) / (windowHeight / 2);
-          progress = Math.max(0, Math.min(1, progress));
-        }
+        // Calculate progress: 0 when entering viewport, 1 when centered, 0 when leaving
+        const sectionCenter = rect.top + sectionHeight / 2;
+        const viewportCenter = windowHeight / 2;
+        const distance = Math.abs(sectionCenter - viewportCenter);
+        const maxDistance = windowHeight / 2 + sectionHeight / 2;
+        
+        let progress = 1 - (distance / maxDistance);
+        progress = Math.max(0, Math.min(1, progress));
+        
+        // Apply easing for smoother transitions
+        progress = progress * progress * (3 - 2 * progress); // smoothstep
         
         return progress;
       });
@@ -167,7 +168,7 @@ const PlanetJourney = () => {
       setScrollProgress(newProgress);
     };
 
-    root.addEventListener('scroll', handleScroll);
+    root.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial calculation
     
     return () => root.removeEventListener('scroll', handleScroll);
@@ -295,22 +296,24 @@ const PlanetJourney = () => {
           const progress = scrollProgress[index] || 0;
           
           // Interpolate values based on scroll progress
-          const scale = 0 + progress * 1.8; // 0 to 1.8
-          const translateX = -120 + progress * 120; // -120% to 0%
-          const rotate = -45 + progress * 45; // -45deg to 0deg
-          const opacity = progress;
-          const blur = 8 - progress * 8; // 8px to 0px
+          // Starting point: 30% from left, small scale
+          // Ending point: centered (0%), full scale
+          const scale = 0.8 + progress * 1.0; // 0.8 to 1.8
+          const translateX = -30 + progress * 30; // -30% to 0%
+          const rotate = -20 + progress * 20; // -20deg to 0deg
+          const opacity = Math.max(0.3, progress); // Always somewhat visible
+          const blur = 6 - progress * 6; // 6px to 0px
           
-          // Trail effects
-          const trail1Scale = 0.3 + progress * 0.2;
-          const trail1TranslateX = -100 + progress * 20;
-          const trail1Rotate = -35 + progress * 10;
-          const trail1Opacity = 0.1 * (1 - progress);
+          // Trail effects - more subtle
+          const trail1Scale = 0.6 + progress * 0.2;
+          const trail1TranslateX = -50 + progress * 20;
+          const trail1Rotate = -25 + progress * 10;
+          const trail1Opacity = 0.15 * (1 - progress);
           
-          const trail2Scale = 0.5 + progress * 0.3;
-          const trail2TranslateX = -80 + progress * 16;
-          const trail2Rotate = -25 + progress * 5;
-          const trail2Opacity = 0.15 * (1 - progress);
+          const trail2Scale = 0.7 + progress * 0.2;
+          const trail2TranslateX = -40 + progress * 15;
+          const trail2Rotate = -15 + progress * 5;
+          const trail2Opacity = 0.2 * (1 - progress);
 
           return (
             <section
@@ -365,8 +368,8 @@ const PlanetJourney = () => {
                   <p
                     className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80 transition-none"
                     style={{
-                      opacity: progress * 0.8,
-                      transform: `translateY(${(1 - progress) * 24}px)`
+                      opacity: Math.max(0.2, progress * 0.8),
+                      transform: `translateY(${(1 - progress) * 20}px)`
                     }}
                   >
                     {planet.label}
@@ -375,8 +378,8 @@ const PlanetJourney = () => {
                   <h2
                     className="text-xl font-semibold tracking-[0.08em] text-foreground transition-none"
                     style={{
-                      opacity: progress,
-                      transform: `translateY(${(1 - progress) * 32}px)`
+                      opacity: Math.max(0.3, progress),
+                      transform: `translateY(${(1 - progress) * 24}px)`
                     }}
                   >
                     {planet.title}
@@ -385,8 +388,8 @@ const PlanetJourney = () => {
                   <p
                     className="text-sm leading-relaxed text-foreground/90 transition-none"
                     style={{
-                      opacity: progress * 0.9,
-                      transform: `translateY(${(1 - progress) * 40}px)`
+                      opacity: Math.max(0.2, progress * 0.9),
+                      transform: `translateY(${(1 - progress) * 28}px)`
                     }}
                   >
                     {planet.body}
@@ -395,8 +398,8 @@ const PlanetJourney = () => {
                   <p
                     className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70 transition-none"
                     style={{
-                      opacity: progress * 0.7,
-                      transform: `translateY(${(1 - progress) * 32}px)`
+                      opacity: Math.max(0.2, progress * 0.7),
+                      transform: `translateY(${(1 - progress) * 20}px)`
                     }}
                   >
                     {planet.meta}
