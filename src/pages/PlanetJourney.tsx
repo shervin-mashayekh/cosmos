@@ -267,15 +267,44 @@ const PlanetJourney = () => {
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
                 <div className="relative flex-shrink-0">
+                  {/* Motion trail effect */}
+                  {!isActive && (
+                    <>
+                      <img
+                        src={planet.image}
+                        alt=""
+                        aria-hidden="true"
+                        className={`absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.15] blur-[2px] ${
+                          isComingFromAbove
+                            ? "scale-[0.5] translate-x-[80%] translate-y-[-40%] rotate-[35deg]"
+                            : "scale-[0.5] -translate-x-[80%] translate-y-[40%] -rotate-[35deg]"
+                        }`}
+                        style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
+                      />
+                      <img
+                        src={planet.image}
+                        alt=""
+                        aria-hidden="true"
+                        className={`absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.1] blur-[4px] ${
+                          isComingFromAbove
+                            ? "scale-[0.3] translate-x-[60%] translate-y-[-30%] rotate-[25deg]"
+                            : "scale-[0.3] -translate-x-[60%] translate-y-[30%] -rotate-[25deg]"
+                        }`}
+                        style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
+                      />
+                    </>
+                  )}
+                  
+                  {/* Main planet with motion blur during transition */}
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-[1200ms] ease-out origin-center ${
+                    className={`relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-in-out origin-center ${
                       isActive
-                        ? "opacity-100 scale-[1.8] translate-x-0 translate-y-0 rotate-0"
+                        ? "opacity-100 scale-[1.8] translate-x-0 translate-y-0 rotate-0 blur-0"
                         : isComingFromAbove
-                        ? "opacity-0 scale-0 translate-x-[100%] translate-y-[-50%] rotate-45"
-                        : "opacity-0 scale-0 -translate-x-[100%] translate-y-[50%] -rotate-45"
+                        ? "opacity-0 scale-0 translate-x-[100%] translate-y-[-50%] rotate-45 blur-[8px]"
+                        : "opacity-0 scale-0 -translate-x-[100%] translate-y-[50%] -rotate-45 blur-[8px]"
                     }`}
                     style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                   />
@@ -283,9 +312,9 @@ const PlanetJourney = () => {
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-500 ease-out ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-400 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground/80 delay-500"
+                        ? "opacity-100 translate-y-0 text-foreground/80 delay-400"
                         : "opacity-0 translate-y-6 text-foreground/0 delay-0"
                     }`}
                   >
@@ -293,9 +322,9 @@ const PlanetJourney = () => {
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-500 ease-out ${
+                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-400 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground delay-600"
+                        ? "opacity-100 translate-y-0 text-foreground delay-500"
                         : "opacity-0 translate-y-8 text-foreground/0 delay-0"
                     }`}
                   >
@@ -303,9 +332,9 @@ const PlanetJourney = () => {
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed transition-all duration-500 ease-out ${
+                    className={`text-sm leading-relaxed transition-all duration-400 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground/90 delay-700"
+                        ? "opacity-100 translate-y-0 text-foreground/90 delay-600"
                         : "opacity-0 translate-y-10 text-foreground/0 delay-0"
                     }`}
                   >
@@ -313,9 +342,9 @@ const PlanetJourney = () => {
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-500 ease-out ${
+                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-400 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground/70 delay-800"
+                        ? "opacity-100 translate-y-0 text-foreground/70 delay-700"
                         : "opacity-0 translate-y-8 text-foreground/0 delay-0"
                     }`}
                   >
