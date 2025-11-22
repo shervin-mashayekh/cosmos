@@ -219,6 +219,40 @@ const PlanetJourney = () => {
           ))}
         </div>
 
+        {/* Shooting stars / comets */}
+        <div className="absolute inset-0">
+          {[...Array(8)].map((_, i) => {
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 100;
+            const angle = Math.random() * 60 - 30; // -30 to 30 degrees
+            const duration = Math.random() * 2 + 1; // 1-3 seconds
+            const delay = Math.random() * 8; // 0-8 seconds
+            
+            return (
+              <div
+                key={`comet-${i}`}
+                className="absolute"
+                style={{
+                  left: `${startX}%`,
+                  top: `${startY}%`,
+                  animation: `shootingStar ${duration}s linear ${delay}s infinite`,
+                  transform: `rotate(${angle}deg)`,
+                }}
+              >
+                <div className="relative">
+                  {/* Comet head */}
+                  <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]" />
+                  {/* Comet tail */}
+                  <div 
+                    className="absolute top-0 right-0 h-[2px] w-16 origin-right bg-gradient-to-r from-white/80 via-white/40 to-transparent"
+                    style={{ transform: 'translateX(100%)' }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Parallax planet layers - moving dramatically with scroll */}
         <img
           src={planet5}
