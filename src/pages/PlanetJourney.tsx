@@ -224,13 +224,7 @@ const PlanetJourney = () => {
   return (
     <div className="relative h-screen bg-[#000000] text-foreground">
       {/* Dramatic starry space background */}
-      <div 
-        className="pointer-events-none fixed inset-0 z-0 overflow-hidden animate-fade-in transition-transform duration-1000 ease-out"
-        style={{ 
-          transform: `scale(${1 + activeIndex * 0.08})`,
-          transformOrigin: 'center center'
-        }}
-      >
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden animate-fade-in">
         {/* Deep space gradient with purple/blue tones */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#020208] to-[#000000]" />
         
