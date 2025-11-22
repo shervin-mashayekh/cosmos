@@ -191,7 +191,7 @@ const PlanetJourney = () => {
   };
 
   const layerOffset = (multiplier: number) =>
-    `translate3d(0, ${scrollY * multiplier * 0.3}px, 0)`;
+    `translate3d(0, ${scrollY * multiplier * 0.15}px, 0)`;
 
   return (
     <div className="relative h-screen bg-[#000000] text-foreground">
