@@ -106,6 +106,7 @@ const PlanetJourney = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prevActiveIndex, setPrevActiveIndex] = useState(0);
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -135,6 +136,11 @@ const PlanetJourney = () => {
     canonical.href = window.location.href;
   }, []);
 
+  // Track previous index for transition direction
+  useEffect(() => {
+    setPrevActiveIndex(activeIndex);
+  }, [activeIndex]);
+
   // Observe sections to trigger active animations similar to the original HTML
   useEffect(() => {
     const root = scrollRef.current;
@@ -146,6 +152,7 @@ const PlanetJourney = () => {
           if (entry.isIntersecting) {
             const indexAttr = (entry.target as HTMLElement).dataset.index;
             const index = indexAttr ? parseInt(indexAttr, 10) : 0;
+            setPrevActiveIndex(activeIndex);
             setActiveIndex(index);
           }
         });
@@ -161,7 +168,7 @@ const PlanetJourney = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [activeIndex]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -248,6 +255,8 @@ const PlanetJourney = () => {
 
         {planets.map((planet, index) => {
           const isActive = index === activeIndex;
+          const isComingFromAbove = index > prevActiveIndex;
+          const isComingFromBelow = index < prevActiveIndex;
 
           return (
             <section
@@ -263,8 +272,10 @@ const PlanetJourney = () => {
                     alt={planet.title}
                     className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-[1200ms] ease-out origin-center ${
                       isActive
-                        ? "opacity-100 scale-[1.8] translate-y-0"
-                        : "opacity-0 scale-0 translate-y-0"
+                        ? "opacity-100 scale-[1.8] translate-x-0 translate-y-0 rotate-0"
+                        : isComingFromAbove
+                        ? "opacity-0 scale-0 translate-x-[100%] translate-y-[-50%] rotate-45"
+                        : "opacity-0 scale-0 -translate-x-[100%] translate-y-[50%] -rotate-45"
                     }`}
                     style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                   />
