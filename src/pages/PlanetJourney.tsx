@@ -366,7 +366,7 @@ const PlanetJourney = () => {
         </div>
         
         {/* Far star layer - slowest parallax */}
-        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 50}px)` }}>
+        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 100}px) translateX(${globalScrollProgress * 150}px)` }}>
           {starLayers.far.map((star, i) => (
             <div
               key={`star-far-${i}`}
@@ -385,7 +385,7 @@ const PlanetJourney = () => {
         </div>
         
         {/* Mid star layer - medium parallax */}
-        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 150}px)` }}>
+        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 200}px) translateX(${globalScrollProgress * 300}px)` }}>
           {starLayers.mid.map((star, i) => (
             <div
               key={`star-mid-${i}`}
@@ -404,7 +404,7 @@ const PlanetJourney = () => {
         </div>
         
         {/* Near star layer - fastest parallax */}
-        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 300}px)` }}>
+        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 300}px) translateX(${globalScrollProgress * 450}px)` }}>
           {starLayers.near.map((star, i) => (
             <div
               key={`star-near-${i}`}
@@ -490,7 +490,7 @@ const PlanetJourney = () => {
                     className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${trail2TranslateX}%) rotate(${trail2Rotate}deg) scale(${trail2Scale})`,
+                      transform: `translateX(${trail2TranslateX}%) scale(${trail2Scale})`,
                       opacity: trail2Opacity,
                       filter: 'blur(2px)'
                     }}
@@ -502,7 +502,7 @@ const PlanetJourney = () => {
                     className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${trail1TranslateX}%) rotate(${trail1Rotate}deg) scale(${trail1Scale})`,
+                      transform: `translateX(${trail1TranslateX}%) scale(${trail1Scale})`,
                       opacity: trail1Opacity,
                       filter: 'blur(4px)'
                     }}
@@ -512,11 +512,12 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none animate-[spin_60s_linear_infinite]"
+                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center animate-[spin_40s_linear_infinite]"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${translateX}%) scale(${scale}) rotate(${rotate}deg)`,
-                      opacity: opacity,
+                      transform: `translateX(${translateX}%) scale(${scale})`,
+                      opacity: progress > 0.15 ? 1 : 0,
+                      transition: 'opacity 0.8s ease-out',
                       filter: `blur(${blur}px)`
                     }}
                   />
