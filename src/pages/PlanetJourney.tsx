@@ -233,28 +233,6 @@ const PlanetJourney = () => {
           })}
         </div>
 
-        {/* Parallax planet layers - moving dramatically with scroll */}
-        <img
-          src={planet2}
-          alt="Icy blue planet in the upper right of the skyfield"
-          className="absolute -right-20 top-[18%] w-80 max-w-[45vw] opacity-30 blur-sm transition-transform duration-75 ease-out"
-          style={{ transform: layerOffset(0.3) }}
-        />
-
-        <img
-          src={planet7}
-          alt="Prismatic planet anchoring the lower left of the skyfield"
-          className="absolute -left-28 bottom-[-10%] w-80 max-w-[45vw] opacity-35 blur-sm transition-transform duration-75 ease-out"
-          style={{ transform: layerOffset(0.5) }}
-        />
-
-        <img
-          src={planet9}
-          alt="Molten red planet hovering near the lower right horizon"
-          className="absolute -right-24 bottom-[-12%] w-[360px] max-w-[55vw] opacity-40 blur-[1px] transition-transform duration-75 ease-out"
-          style={{ transform: layerOffset(0.7) }}
-        />
-
         {/* Additional nebula-like glow effects */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)]" />
