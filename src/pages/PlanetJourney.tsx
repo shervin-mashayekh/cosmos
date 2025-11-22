@@ -107,23 +107,6 @@ const PlanetJourney = () => {
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollY, setScrollY] = useState(0);
-  const [showKeyboardHint, setShowKeyboardHint] = useState(false);
-
-  // Show keyboard hint on first visit
-  useEffect(() => {
-    const hasSeenHint = localStorage.getItem('planetJourneyKeyboardHint');
-    if (!hasSeenHint) {
-      setShowKeyboardHint(true);
-      localStorage.setItem('planetJourneyKeyboardHint', 'true');
-      
-      // Auto-hide after 5 seconds
-      const timer = setTimeout(() => {
-        setShowKeyboardHint(false);
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -364,20 +347,13 @@ const PlanetJourney = () => {
         Scroll to travel between worlds  
       </div>
 
-      {/* Keyboard controls hint */}
-      {showKeyboardHint && (
+      {/* Keyboard controls hint - shows only on first slide */}
+      {activeIndex === 0 && (
         <div 
           className="fixed bottom-20 left-1/2 z-30 -translate-x-1/2 animate-fade-in"
           style={{ animationDuration: '0.5s' }}
         >
           <div className="relative bg-background/90 backdrop-blur-sm border border-foreground/20 rounded-lg px-6 py-3 shadow-lg">
-            <button
-              onClick={() => setShowKeyboardHint(false)}
-              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-foreground/20 hover:bg-foreground/30 transition-colors flex items-center justify-center text-foreground/80 text-xs"
-              aria-label="Close hint"
-            >
-              ×
-            </button>
             <div className="flex items-center gap-3 text-foreground/90">
               <div className="flex gap-1.5">
                 <kbd className="px-2 py-1 bg-foreground/10 border border-foreground/20 rounded text-[10px] font-mono">↑</kbd>
