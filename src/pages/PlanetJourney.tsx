@@ -224,19 +224,19 @@ const PlanetJourney = () => {
   return (
     <div className="relative h-screen bg-[#000000] text-foreground">
       {/* Dramatic starry space background */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden animate-fade-in">
         {/* Deep space gradient with purple/blue tones */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#020208] to-[#000000]" />
         
         {/* Galaxy fog effect */}
-        <div className="absolute inset-0 opacity-25">
+        <div className="absolute inset-0 opacity-25 animate-fade-in" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
           <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/15 blur-[100px] rounded-full" />
           <div className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/8 blur-[140px] rounded-full -translate-x-1/2" />
         </div>
         
         {/* Multiple star layers for depth */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 animate-fade-in" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
           {[...Array(200)].map((_, i) => {
             const size = Math.random() * 3 + 0.5;
             const brightness = Math.random();
@@ -259,8 +259,8 @@ const PlanetJourney = () => {
         </div>
 
         {/* Additional nebula-like glow effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)] animate-fade-in" style={{ animationDelay: '0.6s', animationFillMode: 'both' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)] animate-fade-in" style={{ animationDelay: '0.6s', animationFillMode: 'both' }} />
       </div>
 
       <main
@@ -282,7 +282,7 @@ const PlanetJourney = () => {
               data-index={index}
               className="relative flex h-screen w-screen snap-start items-center justify-center px-[12vw]"
             >
-              <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw]">
+              <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
                 <div className="relative flex-shrink-0">
                   <img
                     src={planet.image}
@@ -343,7 +343,7 @@ const PlanetJourney = () => {
         })}
       </main>
 
-      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)]">
+      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)] animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
         Scroll to travel between worlds  
       </div>
 
@@ -351,7 +351,7 @@ const PlanetJourney = () => {
       {activeIndex === 0 && (
         <div 
           className="fixed bottom-20 left-1/2 z-30 -translate-x-1/2 animate-fade-in"
-          style={{ animationDuration: '0.5s' }}
+          style={{ animationDelay: '1s', animationFillMode: 'both' }}
         >
           <div className="relative bg-background/90 backdrop-blur-sm border border-foreground/20 rounded-lg px-6 py-3 shadow-lg">
             <div className="flex items-center gap-3 text-foreground/90">
@@ -367,7 +367,7 @@ const PlanetJourney = () => {
 
 
       {/* Vertical planet progress indicator */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3 animate-fade-in" style={{ animationDelay: '1.2s', animationFillMode: 'both' }}>
         {planets.map((planet, index) => (
           <button
             key={planet.id}
