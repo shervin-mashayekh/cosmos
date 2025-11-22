@@ -292,8 +292,6 @@ const PlanetJourney = () => {
               data-index={index}
               className="relative flex h-screen w-screen snap-start items-center justify-center px-[12vw]"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background/80" />
-
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw]">
                 <div className="relative flex-shrink-0">
                   <img
