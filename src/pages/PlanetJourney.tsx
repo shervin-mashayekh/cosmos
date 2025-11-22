@@ -108,16 +108,29 @@ const PlanetJourney = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevActiveIndex, setPrevActiveIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState<number[]>(Array(planets.length).fill(0));
+  const [globalScrollProgress, setGlobalScrollProgress] = useState(0);
   
-  // Memoize star positions so they don't regenerate on every render
-  const stars = useRef(
-    [...Array(200)].map(() => ({
-      size: Math.random() * 3 + 0.5,
-      brightness: Math.random(),
+  // Memoize star positions with depth layers for parallax
+  const starLayers = useRef({
+    far: [...Array(150)].map(() => ({
+      size: Math.random() * 1.5 + 0.5,
+      brightness: Math.random() * 0.6 + 0.2,
       top: Math.random() * 100,
       left: Math.random() * 100,
-    }))
-  ).current;
+    })),
+    mid: [...Array(100)].map(() => ({
+      size: Math.random() * 2.5 + 1,
+      brightness: Math.random() * 0.7 + 0.3,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+    })),
+    near: [...Array(50)].map(() => ({
+      size: Math.random() * 3.5 + 1.5,
+      brightness: Math.random() * 0.8 + 0.2,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+    })),
+  }).current;
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -147,12 +160,18 @@ const PlanetJourney = () => {
     canonical.href = window.location.href;
   }, []);
 
-  // Track scroll progress for smooth transitions
+  // Track scroll progress for smooth transitions and global progress
   useEffect(() => {
     const root = scrollRef.current;
     if (!root) return;
 
     const handleScroll = () => {
+      // Calculate global scroll progress for parallax effects
+      const scrollTop = root.scrollTop;
+      const scrollHeight = root.scrollHeight - root.clientHeight;
+      const globalProgress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+      setGlobalScrollProgress(globalProgress);
+
       const newProgress = sectionRefs.current.map((section) => {
         if (!section) return 0;
         
@@ -160,18 +179,19 @@ const PlanetJourney = () => {
         const windowHeight = window.innerHeight;
         const sectionHeight = rect.height;
         
-        // Calculate progress: 0 when entering viewport, 1 when centered, 0 when leaving
-        // Extended range for 3x longer animation duration
+        // Calculate progress with extended range for smoother, longer transitions
         const sectionCenter = rect.top + sectionHeight / 2;
         const viewportCenter = windowHeight / 2;
         const distance = Math.abs(sectionCenter - viewportCenter);
-        const maxDistance = (windowHeight / 2 + sectionHeight / 2) * 3; // 3x larger range
+        const maxDistance = windowHeight * 1.2; // Extended range for smooth travel feeling
         
         let progress = 1 - (distance / maxDistance);
         progress = Math.max(0, Math.min(1, progress));
         
-        // Apply easing for smoother transitions
-        progress = progress * progress * (3 - 2 * progress); // smoothstep
+        // Apply cubic easing for more natural acceleration/deceleration
+        progress = progress < 0.5 
+          ? 4 * progress * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
         
         return progress;
       });
@@ -251,47 +271,149 @@ const PlanetJourney = () => {
     sectionRefs.current[index] = el;
   };
 
+  // Calculate dynamic background color based on active planet
+  const getBackgroundColor = () => {
+    const colors = [
+      { h: 280, s: 60, l: 8 },  // Purple tint
+      { h: 240, s: 50, l: 8 },  // Blue tint
+      { h: 200, s: 55, l: 8 },  // Cyan tint
+      { h: 340, s: 45, l: 8 },  // Pink tint
+      { h: 280, s: 50, l: 8 },  // Purple-pink
+      { h: 260, s: 55, l: 8 },  // Deep purple
+      { h: 220, s: 50, l: 8 },  // Blue-purple
+      { h: 300, s: 45, l: 8 },  // Magenta
+      { h: 270, s: 60, l: 8 },  // Violet
+    ];
+    
+    const current = colors[activeIndex];
+    const next = colors[Math.min(activeIndex + 1, colors.length - 1)];
+    const progress = scrollProgress[activeIndex] || 0;
+    
+    // Interpolate between current and next color
+    const h = current.h + (next.h - current.h) * (1 - progress);
+    const s = current.s + (next.s - current.s) * (1 - progress);
+    const l = current.l + (next.l - current.l) * (1 - progress);
+    
+    return `hsl(${h}, ${s}%, ${l}%)`;
+  };
+
+  // Calculate warp effect intensity based on scroll velocity
+  const scrollVelocity = useRef(0);
+  const lastScrollTop = useRef(0);
+  
+  useEffect(() => {
+    const root = scrollRef.current;
+    if (!root) return;
+    
+    const calculateVelocity = () => {
+      const currentScroll = root.scrollTop;
+      scrollVelocity.current = Math.abs(currentScroll - lastScrollTop.current);
+      lastScrollTop.current = currentScroll;
+    };
+    
+    const interval = setInterval(calculateVelocity, 50);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="relative h-screen bg-[#000000] text-foreground">
-      {/* Static starry space background */}
+    <div 
+      className="relative h-screen text-foreground transition-colors duration-1000"
+      style={{ backgroundColor: getBackgroundColor() }}
+    >
+      {/* Parallax starry space background */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        {/* Deep space gradient with purple/blue tones - completely static */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#020208] to-[#000000]" />
-        
-        {/* Static galaxy fog effect */}
-        <div className="absolute inset-0 opacity-25">
-          <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/15 blur-[120px] rounded-full" />
-          <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/15 blur-[100px] rounded-full" />
-          <div className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/8 blur-[140px] rounded-full -translate-x-1/2" />
+        {/* Dynamic galaxy fog effect that shifts with scroll */}
+        <div className="absolute inset-0 opacity-30 transition-transform duration-700">
+          <div 
+            className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/20 blur-[120px] rounded-full"
+            style={{ transform: `translate(${globalScrollProgress * -100}px, ${globalScrollProgress * 150}px)` }}
+          />
+          <div 
+            className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/20 blur-[100px] rounded-full"
+            style={{ transform: `translate(${globalScrollProgress * 80}px, ${globalScrollProgress * -100}px)` }}
+          />
+          <div 
+            className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/15 blur-[140px] rounded-full -translate-x-1/2"
+            style={{ transform: `translate(-50%, ${globalScrollProgress * -120}px)` }}
+          />
         </div>
         
-        {/* Static star field - no movement */}
-        <div className="absolute inset-0">
-          {stars.map((star, i) => (
+        {/* Far star layer - slowest parallax */}
+        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 50}px)` }}>
+          {starLayers.far.map((star, i) => (
             <div
-              key={`star-${i}`}
+              key={`star-far-${i}`}
               className="absolute rounded-full"
               style={{
                 width: star.size + 'px',
                 height: star.size + 'px',
                 top: star.top + '%',
                 left: star.left + '%',
-                backgroundColor: star.brightness > 0.7 ? '#ffffff' : star.brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
-                opacity: star.brightness * 0.6 + 0.4,
-                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.brightness * 0.5 + 0.3})`,
+                backgroundColor: '#e0e7ff',
+                opacity: star.brightness * 0.4,
+                boxShadow: `0 0 ${star.size}px rgba(224, 231, 255, ${star.brightness * 0.3})`,
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Mid star layer - medium parallax */}
+        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 150}px)` }}>
+          {starLayers.mid.map((star, i) => (
+            <div
+              key={`star-mid-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: star.size + 'px',
+                height: star.size + 'px',
+                top: star.top + '%',
+                left: star.left + '%',
+                backgroundColor: star.brightness > 0.6 ? '#ffffff' : '#e0e7ff',
+                opacity: star.brightness * 0.6,
+                boxShadow: `0 0 ${star.size * 1.5}px rgba(255, 255, 255, ${star.brightness * 0.4})`,
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Near star layer - fastest parallax */}
+        <div className="absolute inset-0" style={{ transform: `translateY(${globalScrollProgress * 300}px)` }}>
+          {starLayers.near.map((star, i) => (
+            <div
+              key={`star-near-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: star.size + 'px',
+                height: star.size + 'px',
+                top: star.top + '%',
+                left: star.left + '%',
+                backgroundColor: '#ffffff',
+                opacity: star.brightness * 0.7 + 0.3,
+                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.brightness * 0.6})`,
               }}
             />
           ))}
         </div>
 
-        {/* Static nebula glow effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)]" />
+        {/* Warp streak effect during fast scrolling */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 10px,
+              rgba(255, 255, 255, ${Math.min(scrollVelocity.current / 100, 0.05)}) 10px,
+              rgba(255, 255, 255, ${Math.min(scrollVelocity.current / 100, 0.05)}) 11px
+            )`,
+            opacity: Math.min(scrollVelocity.current / 50, 0.3),
+          }}
+        />
       </div>
 
       <main
         ref={scrollRef}
-        className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth"
+        className="h-screen overflow-y-scroll scroll-smooth"
         aria-label="Thematic Skyfield planet journey"
       >
         <div className="sr-only">
@@ -302,30 +424,34 @@ const PlanetJourney = () => {
           const isActive = index === activeIndex;
           const progress = scrollProgress[index] || 0;
           
-          // Interpolate values based on scroll progress
-          const scale = 0.8 + progress * 0.64; // 0.8 to 1.44
-          const translateX = -10 + progress * 10; // -10% to 0%
-          const rotate = -20 + progress * 20; // -20deg to 0deg
-          const opacity = Math.max(0.3, progress); // Always somewhat visible
-          const blur = 6 - progress * 6; // 6px to 0px
+          // More dramatic interpolation for space travel feel
+          const scale = 0.3 + progress * 1.4; // 0.3 to 1.7 - planets start tiny and far away
+          const translateX = -30 + progress * 30; // -30% to 0% - more horizontal travel
+          const translateZ = (1 - progress) * 200; // Simulate depth
+          const rotate = -30 + progress * 30; // -30deg to 0deg
+          const opacity = progress > 0.1 ? Math.pow(progress, 0.7) : 0; // Fade in/out more dramatically
+          const blur = Math.max(0, 12 * (1 - progress)); // 12px to 0px - stronger blur effect
           
-          // Trail effects
-          const trail1Scale = 0.6 + progress * 0.2;
-          const trail1TranslateX = -20 + progress * 10;
-          const trail1Rotate = -25 + progress * 10;
-          const trail1Opacity = 0.15 * (1 - progress);
+          // Enhanced trail effects for motion blur
+          const trail1Scale = 0.4 + progress * 0.3;
+          const trail1TranslateX = -40 + progress * 20;
+          const trail1Rotate = -35 + progress * 15;
+          const trail1Opacity = Math.max(0, 0.25 * (1 - progress) * progress);
           
-          const trail2Scale = 0.7 + progress * 0.2;
-          const trail2TranslateX = -15 + progress * 8;
-          const trail2Rotate = -15 + progress * 5;
-          const trail2Opacity = 0.2 * (1 - progress);
+          const trail2Scale = 0.5 + progress * 0.4;
+          const trail2TranslateX = -30 + progress * 15;
+          const trail2Rotate = -25 + progress * 12;
+          const trail2Opacity = Math.max(0, 0.3 * (1 - progress) * progress);
 
           return (
             <section
               key={planet.id}
               ref={setSectionRef(index)}
               data-index={index}
-              className="relative flex h-screen w-screen snap-start items-center justify-center px-[12vw]"
+              className="relative flex h-[150vh] w-screen items-center justify-center px-[12vw]"
+              style={{ 
+                minHeight: '150vh',
+              }}
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
                 <div className="relative flex-shrink-0">
