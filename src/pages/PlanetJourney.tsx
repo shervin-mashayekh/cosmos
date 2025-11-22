@@ -414,6 +414,39 @@ const PlanetJourney = () => {
           </svg>
         </button>
       )}
+
+      {/* Vertical planet progress indicator */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
+        {planets.map((planet, index) => (
+          <button
+            key={planet.id}
+            onClick={() => {
+              sectionRefs.current[index]?.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }}
+            className={`group relative transition-all duration-300 ${
+              index === activeIndex ? 'scale-125' : 'scale-100 hover:scale-110'
+            }`}
+            aria-label={`Go to ${planet.label}`}
+          >
+            <div 
+              className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
+                index === activeIndex 
+                  ? 'bg-foreground border-foreground shadow-[0_0_12px_rgba(255,255,255,0.6)]' 
+                  : 'bg-transparent border-foreground/30 hover:border-foreground/60'
+              }`}
+            />
+            {/* Tooltip */}
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+              <div className="bg-background/90 backdrop-blur-sm border border-foreground/20 rounded px-3 py-1.5 text-xs text-foreground/90">
+                {planet.label}
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
