@@ -212,10 +212,11 @@ const PlanetJourney = () => {
           {[...Array(200)].map((_, i) => {
             const size = Math.random() * 3 + 0.5;
             const brightness = Math.random();
+            const shouldAnimate = Math.random() > 0.6; // Only 40% of stars animate
             return (
               <div
                 key={`star-${i}`}
-                className="absolute rounded-full animate-pulse"
+                className={`absolute rounded-full ${shouldAnimate ? 'animate-pulse' : ''}`}
                 style={{
                   width: size + 'px',
                   height: size + 'px',
@@ -224,8 +225,8 @@ const PlanetJourney = () => {
                   backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
                   opacity: Math.random() * 0.6 + 0.4,
                   boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
-                  animationDelay: Math.random() * 6 + 's',
-                  animationDuration: Math.random() * 4 + 3 + 's',
+                  animationDelay: shouldAnimate ? Math.random() * 8 + 's' : undefined,
+                  animationDuration: shouldAnimate ? Math.random() * 5 + 4 + 's' : undefined,
                 }}
               />
             );
@@ -283,51 +284,55 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] transition-all duration-700 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
+                    className={`w-[min(38vw,480px)] transition-all duration-900 ease-in-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
                       isActive
                         ? "opacity-100 scale-100 translate-y-0 animate-[spin_40s_linear_infinite]"
-                        : "opacity-0 scale-85 translate-y-16"
+                        : "opacity-0 scale-90 translate-y-12"
                     }`}
                   />
                 </div>
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-700 ease-out ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-800 ease-in-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/80"
-                        : "opacity-0 translate-y-6 text-foreground/0"
+                        : "opacity-0 translate-y-4 text-foreground/0"
                     }`}
+                    style={{ transitionDelay: isActive ? '100ms' : '0ms' }}
                   >
                     {planet.label}
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-700 ease-out ${
+                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-800 ease-in-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground"
-                        : "opacity-0 translate-y-8 text-foreground/0"
+                        : "opacity-0 translate-y-6 text-foreground/0"
                     }`}
+                    style={{ transitionDelay: isActive ? '200ms' : '0ms' }}
                   >
                     {planet.title}
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed transition-all duration-700 ease-out ${
+                    className={`text-sm leading-relaxed transition-all duration-800 ease-in-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/90"
-                        : "opacity-0 translate-y-10 text-foreground/0"
+                        : "opacity-0 translate-y-6 text-foreground/0"
                     }`}
+                    style={{ transitionDelay: isActive ? '300ms' : '0ms' }}
                   >
                     {planet.body}
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-700 ease-out ${
+                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-800 ease-in-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/70"
-                        : "opacity-0 translate-y-8 text-foreground/0"
+                        : "opacity-0 translate-y-4 text-foreground/0"
                     }`}
+                    style={{ transitionDelay: isActive ? '400ms' : '0ms' }}
                   >
                     {planet.meta}
                   </p>
