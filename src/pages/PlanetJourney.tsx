@@ -261,7 +261,7 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out animate-[spin_40s_linear_infinite] ${
+                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out ${
                       isActive
                         ? "opacity-100 scale-[1.8] translate-y-0"
                         : "opacity-0 scale-0 translate-y-0"
