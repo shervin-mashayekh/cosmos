@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { Planet3D, Planet3DTrail } from '@/components/Planet3D';
 import planet1 from "@/assets/planet-1.png";
 import planet2 from "@/assets/planet-2.png";
 import planet3 from "@/assets/planet-3.png";
@@ -301,26 +304,6 @@ const PlanetJourney = () => {
         {planets.map((planet, index) => {
           const isActive = index === activeIndex;
           const progress = scrollProgress[index] || 0;
-          
-          // Interpolate values based on scroll progress
-          // Starting point: 10% from left, small scale
-          // Ending point: centered (0%), 20% smaller final size (1.44 instead of 1.8)
-          const scale = 0.8 + progress * 0.64; // 0.8 to 1.44 (20% smaller than 1.8)
-          const translateX = -10 + progress * 10; // -10% to 0%
-          const rotate = -20 + progress * 20; // -20deg to 0deg
-          const opacity = Math.max(0.3, progress); // Always somewhat visible
-          const blur = 6 - progress * 6; // 6px to 0px
-          
-          // Trail effects - adjusted for new translateX range
-          const trail1Scale = 0.6 + progress * 0.2;
-          const trail1TranslateX = -20 + progress * 10;
-          const trail1Rotate = -25 + progress * 10;
-          const trail1Opacity = 0.15 * (1 - progress);
-          
-          const trail2Scale = 0.7 + progress * 0.2;
-          const trail2TranslateX = -15 + progress * 8;
-          const trail2Rotate = -15 + progress * 5;
-          const trail2Opacity = 0.2 * (1 - progress);
 
           return (
             <section
@@ -330,45 +313,36 @@ const PlanetJourney = () => {
               className="relative flex h-screen w-screen snap-start items-center justify-center px-[12vw]"
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
-                <div className="relative flex-shrink-0">
-                  {/* Motion trail effect - scroll-driven */}
-                  <img
-                    src={planet.image}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
-                    style={{ 
-                      clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${trail2TranslateX}%) rotate(${trail2Rotate}deg) scale(${trail2Scale})`,
-                      opacity: trail2Opacity,
-                      filter: 'blur(2px)'
-                    }}
-                  />
-                  <img
-                    src={planet.image}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
-                    style={{ 
-                      clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${trail1TranslateX}%) rotate(${trail1Rotate}deg) scale(${trail1Scale})`,
-                      opacity: trail1Opacity,
-                      filter: 'blur(4px)'
-                    }}
-                  />
-                  
-                  {/* Main planet - scroll-driven animation */}
-                  <img
-                    src={planet.image}
-                    alt={planet.title}
-                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
-                    style={{ 
-                      clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${translateX}%) rotate(${rotate}deg) scale(${scale})`,
-                      opacity: opacity,
-                      filter: `blur(${blur}px)`
-                    }}
-                  />
+                <div className="relative w-[min(38vw,480px)] h-[min(38vw,480px)]">
+                  <Suspense fallback={
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="text-foreground/50">Loading 3D Planet...</div>
+                    </div>
+                  }>
+                    <Canvas>
+                      <PerspectiveCamera makeDefault position={[0, 0, 3.5]} />
+                      
+                      {/* Lighting setup */}
+                      <ambientLight intensity={0.4} />
+                      <directionalLight position={[5, 5, 5]} intensity={1} />
+                      <directionalLight position={[-5, -5, -5]} intensity={0.3} />
+                      <pointLight position={[0, 0, 5]} intensity={0.5} color="#8b5cf6" />
+                      
+                      {/* Trail effects */}
+                      <Planet3DTrail imageUrl={planet.image} progress={progress} trailIndex={2} />
+                      <Planet3DTrail imageUrl={planet.image} progress={progress} trailIndex={1} />
+                      
+                      {/* Main planet */}
+                      <Planet3D imageUrl={planet.image} progress={progress} />
+                      
+                      {/* Orbit controls for interaction (disabled rotation) */}
+                      <OrbitControls 
+                        enableZoom={false} 
+                        enablePan={false}
+                        enableRotate={false}
+                      />
+                    </Canvas>
+                  </Suspense>
                 </div>
 
                 <article className="relative max-w-md space-y-3">
