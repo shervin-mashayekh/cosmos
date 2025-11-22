@@ -224,8 +224,8 @@ const PlanetJourney = () => {
                   backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
                   opacity: Math.random() * 0.6 + 0.4,
                   boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
-                  animationDelay: Math.random() * 4 + 's',
-                  animationDuration: Math.random() * 3 + 2 + 's',
+                  animationDelay: Math.random() * 6 + 's',
+                  animationDuration: Math.random() * 4 + 3 + 's',
                 }}
               />
             );
@@ -233,20 +233,6 @@ const PlanetJourney = () => {
         </div>
 
         {/* Parallax planet layers - moving dramatically with scroll */}
-        <img
-          src={planet5}
-          alt="Radiant stellar core glowing at the centre of the thematic skyfield"
-          className="absolute left-1/2 top-[-20%] w-[520px] max-w-[70vw] -translate-x-1/2 opacity-30 blur-[2px] transition-transform duration-75 ease-out"
-          style={{ transform: `translateX(-50%) ${layerOffset(0.6)}` }}
-        />
-
-        <img
-          src={planet1}
-          alt="Lava planet drifting in the upper left of the skyfield"
-          className="absolute -left-32 top-1/3 w-72 max-w-[40vw] opacity-35 blur-sm transition-transform duration-75 ease-out"
-          style={{ transform: layerOffset(0.4) }}
-        />
-
         <img
           src={planet2}
           alt="Icy blue planet in the upper right of the skyfield"
