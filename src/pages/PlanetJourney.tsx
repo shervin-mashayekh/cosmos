@@ -107,6 +107,7 @@ const PlanetJourney = () => {
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollY, setScrollY] = useState(0);
+  const [sectionProgress, setSectionProgress] = useState<number[]>(new Array(9).fill(0));
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -136,7 +137,7 @@ const PlanetJourney = () => {
     canonical.href = window.location.href;
   }, []);
 
-  // Track scroll position inside the main scroll container for parallax
+  // Track scroll position inside the main scroll container for parallax and smooth transitions
   useEffect(() => {
     const root = scrollRef.current;
     if (!root) return;
@@ -148,6 +149,24 @@ const PlanetJourney = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setScrollY(top);
+          
+          // Calculate progress for each section based on viewport position
+          const viewportHeight = window.innerHeight;
+          const newProgress = sectionRefs.current.map((section) => {
+            if (!section) return 0;
+            
+            const rect = section.getBoundingClientRect();
+            const sectionCenter = rect.top + rect.height / 2;
+            const viewportCenter = viewportHeight / 2;
+            const distance = Math.abs(sectionCenter - viewportCenter);
+            const maxDistance = viewportHeight;
+            
+            // Calculate progress (1 at center, 0 at max distance)
+            const progress = Math.max(0, 1 - distance / maxDistance);
+            return progress;
+          });
+          
+          setSectionProgress(newProgress);
           ticking = false;
         });
         ticking = true;
@@ -155,6 +174,7 @@ const PlanetJourney = () => {
     };
 
     root.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial calculation
     return () => root.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -249,6 +269,12 @@ const PlanetJourney = () => {
 
         {planets.map((planet, index) => {
           const isActive = index === activeIndex;
+          const progress = sectionProgress[index] || 0;
+          
+          // Smooth interpolation values
+          const opacity = progress;
+          const scale = 0.85 + (progress * 0.45); // 0.85 to 1.3
+          const translateY = (1 - progress) * 30;
 
           return (
             <section
@@ -262,56 +288,52 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] scale-[1.3] transition-all duration-900 ease-in-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
-                      isActive
-                        ? "opacity-100 scale-[1.3] translate-y-0 animate-[spin_40s_linear_infinite]"
-                        : "opacity-0 scale-[1.17] translate-y-12"
-                    }`}
-                    style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
+                    className="w-[min(38vw,480px)] transition-all duration-300 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] animate-[spin_40s_linear_infinite]"
+                    style={{ 
+                      clipPath: 'inset(12% 12% 12% 12%)',
+                      opacity,
+                      transform: `scale(${scale}) translateY(${translateY}px)`
+                    }}
                   />
                 </div>
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-800 ease-in-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground/80"
-                        : "opacity-0 translate-y-4 text-foreground/0"
-                    }`}
-                    style={{ transitionDelay: isActive ? '100ms' : '0ms' }}
+                    className="text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-300 ease-out text-foreground/80"
+                    style={{
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 20}px)`
+                    }}
                   >
                     {planet.label}
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-800 ease-in-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground"
-                        : "opacity-0 translate-y-6 text-foreground/0"
-                    }`}
-                    style={{ transitionDelay: isActive ? '200ms' : '0ms' }}
+                    className="text-xl font-semibold tracking-[0.08em] transition-all duration-300 ease-out text-foreground"
+                    style={{
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 25}px)`
+                    }}
                   >
                     {planet.title}
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed transition-all duration-800 ease-in-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground/90"
-                        : "opacity-0 translate-y-6 text-foreground/0"
-                    }`}
-                    style={{ transitionDelay: isActive ? '300ms' : '0ms' }}
+                    className="text-sm leading-relaxed transition-all duration-300 ease-out text-foreground/90"
+                    style={{
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 25}px)`
+                    }}
                   >
                     {planet.body}
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-800 ease-in-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground/70"
-                        : "opacity-0 translate-y-4 text-foreground/0"
-                    }`}
-                    style={{ transitionDelay: isActive ? '400ms' : '0ms' }}
+                    className="pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-300 ease-out text-foreground/70"
+                    style={{
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 20}px)`
+                    }}
                   >
                     {planet.meta}
                   </p>
