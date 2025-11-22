@@ -70,20 +70,3 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
-
-@keyframes shootingStar {
-  0% {
-    transform: translateX(0) translateY(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(300px) translateY(300px);
-    opacity: 0;
-  }
-}

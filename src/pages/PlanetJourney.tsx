@@ -232,40 +232,6 @@ const PlanetJourney = () => {
           })}
         </div>
 
-        {/* Shooting stars / comets */}
-        <div className="absolute inset-0">
-          {[...Array(8)].map((_, i) => {
-            const startX = Math.random() * 100;
-            const startY = Math.random() * 100;
-            const angle = Math.random() * 60 - 30; // -30 to 30 degrees
-            const duration = Math.random() * 2 + 1; // 1-3 seconds
-            const delay = Math.random() * 8; // 0-8 seconds
-            
-            return (
-              <div
-                key={`comet-${i}`}
-                className="absolute"
-                style={{
-                  left: `${startX}%`,
-                  top: `${startY}%`,
-                  animation: `shootingStar ${duration}s linear ${delay}s infinite`,
-                  transform: `rotate(${angle}deg)`,
-                }}
-              >
-                <div className="relative">
-                  {/* Comet head */}
-                  <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]" />
-                  {/* Comet tail */}
-                  <div 
-                    className="absolute top-0 right-0 h-[2px] w-16 origin-right bg-gradient-to-r from-white/80 via-white/40 to-transparent"
-                    style={{ transform: 'translateX(100%)' }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
         {/* Parallax planet layers - moving dramatically with scroll */}
         <img
           src={planet5}
@@ -309,7 +275,7 @@ const PlanetJourney = () => {
 
       <main
         ref={scrollRef}
-        className="h-screen overflow-y-scroll snap-y snap-mandatory"
+        className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth"
         aria-label="Thematic Skyfield planet journey"
       >
         <div className="sr-only">
@@ -333,7 +299,7 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] transition-all duration-500 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
+                    className={`w-[min(38vw,480px)] transition-all duration-700 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
                       isActive
                         ? "opacity-100 scale-100 translate-y-0 animate-[spin_40s_linear_infinite]"
                         : "opacity-0 scale-85 translate-y-16"
@@ -343,7 +309,7 @@ const PlanetJourney = () => {
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-500 ease-out ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-700 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/80"
                         : "opacity-0 translate-y-6 text-foreground/0"
@@ -353,7 +319,7 @@ const PlanetJourney = () => {
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-500 ease-out ${
+                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-700 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground"
                         : "opacity-0 translate-y-8 text-foreground/0"
@@ -363,7 +329,7 @@ const PlanetJourney = () => {
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed transition-all duration-500 ease-out ${
+                    className={`text-sm leading-relaxed transition-all duration-700 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/90"
                         : "opacity-0 translate-y-10 text-foreground/0"
@@ -373,7 +339,7 @@ const PlanetJourney = () => {
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-500 ease-out ${
+                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-700 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/70"
                         : "opacity-0 translate-y-8 text-foreground/0"
