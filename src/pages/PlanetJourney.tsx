@@ -161,10 +161,11 @@ const PlanetJourney = () => {
         const sectionHeight = rect.height;
         
         // Calculate progress: 0 when entering viewport, 1 when centered, 0 when leaving
+        // Extended range for 3x longer animation duration
         const sectionCenter = rect.top + sectionHeight / 2;
         const viewportCenter = windowHeight / 2;
         const distance = Math.abs(sectionCenter - viewportCenter);
-        const maxDistance = windowHeight / 2 + sectionHeight / 2;
+        const maxDistance = (windowHeight / 2 + sectionHeight / 2) * 3; // 3x larger range
         
         let progress = 1 - (distance / maxDistance);
         progress = Math.max(0, Math.min(1, progress));
@@ -302,22 +303,22 @@ const PlanetJourney = () => {
           const progress = scrollProgress[index] || 0;
           
           // Interpolate values based on scroll progress
-          // Starting point: 30% from left, small scale
+          // Starting point: 10% from left, small scale
           // Ending point: centered (0%), 20% smaller final size (1.44 instead of 1.8)
           const scale = 0.8 + progress * 0.64; // 0.8 to 1.44 (20% smaller than 1.8)
-          const translateX = -30 + progress * 30; // -30% to 0%
+          const translateX = -10 + progress * 10; // -10% to 0%
           const rotate = -20 + progress * 20; // -20deg to 0deg
           const opacity = Math.max(0.3, progress); // Always somewhat visible
           const blur = 6 - progress * 6; // 6px to 0px
           
-          // Trail effects - more subtle
+          // Trail effects - adjusted for new translateX range
           const trail1Scale = 0.6 + progress * 0.2;
-          const trail1TranslateX = -50 + progress * 20;
+          const trail1TranslateX = -20 + progress * 10;
           const trail1Rotate = -25 + progress * 10;
           const trail1Opacity = 0.15 * (1 - progress);
           
           const trail2Scale = 0.7 + progress * 0.2;
-          const trail2TranslateX = -40 + progress * 15;
+          const trail2TranslateX = -15 + progress * 8;
           const trail2Rotate = -15 + progress * 5;
           const trail2Opacity = 0.2 * (1 - progress);
 
