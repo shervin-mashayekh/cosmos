@@ -194,29 +194,42 @@ const PlanetJourney = () => {
     `translate3d(0, ${scrollY * multiplier * 0.8}px, 0)`;
 
   return (
-    <div className="relative h-screen bg-background text-foreground">
+    <div className="relative h-screen bg-[#000000] text-foreground">
       {/* Dramatic starry space background */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        {/* Deep space gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#050510] to-[#000000]" />
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        {/* Deep space gradient with purple/blue tones */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#0a0520] to-[#000000]" />
+        
+        {/* Galaxy fog effect */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/20 blur-[120px] rounded-full" />
+          <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/20 blur-[100px] rounded-full" />
+          <div className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/10 blur-[140px] rounded-full -translate-x-1/2" />
+        </div>
         
         {/* Multiple star layers for depth */}
         <div className="absolute inset-0">
-          {[...Array(150)].map((_, i) => (
-            <div
-              key={`star-${i}`}
-              className="absolute rounded-full bg-white animate-pulse"
-              style={{
-                width: Math.random() * 2.5 + 0.5 + 'px',
-                height: Math.random() * 2.5 + 0.5 + 'px',
-                top: Math.random() * 100 + '%',
-                left: Math.random() * 100 + '%',
-                opacity: Math.random() * 0.8 + 0.2,
-                animationDelay: Math.random() * 4 + 's',
-                animationDuration: Math.random() * 3 + 1.5 + 's',
-              }}
-            />
-          ))}
+          {[...Array(200)].map((_, i) => {
+            const size = Math.random() * 3 + 0.5;
+            const brightness = Math.random();
+            return (
+              <div
+                key={`star-${i}`}
+                className="absolute rounded-full animate-pulse"
+                style={{
+                  width: size + 'px',
+                  height: size + 'px',
+                  top: Math.random() * 100 + '%',
+                  left: Math.random() * 100 + '%',
+                  backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
+                  opacity: Math.random() * 0.6 + 0.4,
+                  boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
+                  animationDelay: Math.random() * 4 + 's',
+                  animationDuration: Math.random() * 3 + 2 + 's',
+                }}
+              />
+            );
+          })}
         </div>
 
         {/* Shooting stars / comets */}
@@ -257,7 +270,7 @@ const PlanetJourney = () => {
         <img
           src={planet5}
           alt="Radiant stellar core glowing at the centre of the thematic skyfield"
-          className="absolute left-1/2 top-[-20%] w-[520px] max-w-[70vw] -translate-x-1/2 opacity-40 blur-[2px] transition-transform duration-75 ease-out"
+          className="absolute left-1/2 top-[-20%] w-[520px] max-w-[70vw] -translate-x-1/2 opacity-30 blur-[2px] transition-transform duration-75 ease-out"
           style={{ transform: `translateX(-50%) ${layerOffset(0.6)}` }}
         />
 
