@@ -224,7 +224,13 @@ const PlanetJourney = () => {
   return (
     <div className="relative h-screen bg-[#000000] text-foreground">
       {/* Dramatic starry space background */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden animate-fade-in">
+      <div 
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden animate-fade-in transition-transform duration-1000 ease-out"
+        style={{ 
+          transform: `scale(${1 + activeIndex * 0.08})`,
+          transformOrigin: 'center center'
+        }}
+      >
         {/* Deep space gradient with purple/blue tones */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#020208] to-[#000000]" />
         
@@ -287,7 +293,7 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-1000 ease-out ${
+                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
                       isActive
                         ? "opacity-100 scale-[1.8] translate-y-0 animate-[spin_40s_linear_infinite]"
                         : "opacity-0 scale-[0.6] translate-y-12"
