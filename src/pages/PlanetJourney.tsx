@@ -260,7 +260,7 @@ const PlanetJourney = () => {
             return (
               <div
                 key={`star-${i}`}
-                className="absolute rounded-full"
+                className="absolute rounded-full transition-none"
                 style={{
                   width: size + 'px',
                   height: size + 'px',
