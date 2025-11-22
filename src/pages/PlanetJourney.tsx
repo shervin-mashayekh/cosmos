@@ -108,8 +108,16 @@ const PlanetJourney = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevActiveIndex, setPrevActiveIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState<number[]>(Array(planets.length).fill(0));
-  const isScrollingRef = useRef(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  
+  // Memoize star positions so they don't regenerate on every render
+  const stars = useRef(
+    [...Array(200)].map(() => ({
+      size: Math.random() * 3 + 0.5,
+      brightness: Math.random(),
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+    }))
+  ).current;
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -138,54 +146,6 @@ const PlanetJourney = () => {
     }
     canonical.href = window.location.href;
   }, []);
-
-  // Smooth mouse wheel scrolling
-  useEffect(() => {
-    const root = scrollRef.current;
-    if (!root) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      
-      // Clear existing timeout
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-      
-      if (isScrollingRef.current) return;
-      
-      const delta = e.deltaY;
-      const threshold = 50; // Minimum scroll amount to trigger
-      
-      if (Math.abs(delta) > threshold) {
-        isScrollingRef.current = true;
-        
-        const direction = delta > 0 ? 1 : -1;
-        const nextIndex = Math.max(0, Math.min(activeIndex + direction, planets.length - 1));
-        
-        if (nextIndex !== activeIndex && sectionRefs.current[nextIndex]) {
-          sectionRefs.current[nextIndex]?.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-        
-        // Reset scrolling flag after animation
-        scrollTimeoutRef.current = setTimeout(() => {
-          isScrollingRef.current = false;
-        }, 800);
-      }
-    };
-
-    root.addEventListener('wheel', handleWheel, { passive: false });
-    
-    return () => {
-      root.removeEventListener('wheel', handleWheel);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, [activeIndex]);
 
   // Track scroll progress for smooth transitions
   useEffect(() => {
@@ -306,26 +266,21 @@ const PlanetJourney = () => {
         
         {/* Static star field - no movement */}
         <div className="absolute inset-0">
-          {[...Array(200)].map((_, i) => {
-            const size = Math.random() * 3 + 0.5;
-            const brightness = Math.random();
-            return (
-              <div
-                key={`star-${i}`}
-                className="absolute rounded-full"
-                style={{
-                  width: size + 'px',
-                  height: size + 'px',
-                  top: Math.random() * 100 + '%',
-                  left: Math.random() * 100 + '%',
-                  backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
-                  opacity: Math.random() * 0.6 + 0.4,
-                  boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
-                  transform: 'none',
-                }}
-              />
-            );
-          })}
+          {stars.map((star, i) => (
+            <div
+              key={`star-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: star.size + 'px',
+                height: star.size + 'px',
+                top: star.top + '%',
+                left: star.left + '%',
+                backgroundColor: star.brightness > 0.7 ? '#ffffff' : star.brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
+                opacity: star.brightness * 0.6 + 0.4,
+                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.brightness * 0.5 + 0.3})`,
+              }}
+            />
+          ))}
         </div>
 
         {/* Static nebula glow effects */}
