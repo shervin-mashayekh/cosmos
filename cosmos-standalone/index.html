@@ -10,9 +10,9 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.169.0/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/examples/js/loaders/OBJLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/examples/js/loaders/MTLLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.169.0/examples/js/loaders/OBJLoader.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   
@@ -281,6 +281,7 @@
   </style>
 </head>
 <body>
+  <div id="three-container"></div>
   <div id="root"></div>
 
   <script type="text/babel">
@@ -1144,12 +1145,14 @@
       });
     }
 
-    // Render App
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<CosmosPage />);
+    // Render App and initialize Three.js after all scripts load
+    window.addEventListener('load', function() {
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<CosmosPage />);
 
-    // Initialize Three.js after React renders
-    setTimeout(initThreeScene, 100);
+      // Initialize Three.js after React renders and scripts are loaded
+      setTimeout(initThreeScene, 200);
+    });
   </script>
 </body>
 </html>
