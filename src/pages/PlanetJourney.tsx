@@ -248,7 +248,7 @@ const PlanetJourney = () => {
         if (nextIndex !== activeIndex && sectionRefs.current[nextIndex]) {
           sectionRefs.current[nextIndex]?.scrollIntoView({ 
             behavior: 'smooth',
-            block: 'start'
+            block: 'center'
           });
         }
       } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
@@ -257,7 +257,7 @@ const PlanetJourney = () => {
         if (prevIndex !== activeIndex && sectionRefs.current[prevIndex]) {
           sectionRefs.current[prevIndex]?.scrollIntoView({ 
             behavior: 'smooth',
-            block: 'start'
+            block: 'center'
           });
         }
       }
@@ -507,45 +507,58 @@ const PlanetJourney = () => {
                 </div>
 
                 <article className="relative max-w-md space-y-3">
-                  <p
-                    className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80"
-                    style={{
-                      opacity: progress,
-                      transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                    }}
-                  >
-                    {planet.label}
-                  </p>
+                  {(() => {
+                    // Calculate text-specific progress (triggered when planet lands at ~85% scroll)
+                    const textProgress = progress > 0.85 ? Math.pow((progress - 0.85) / 0.15, 1.5) : 0;
+                    
+                    return (
+                      <>
+                        <p
+                          className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80"
+                          style={{
+                            opacity: textProgress,
+                            transform: `translateY(${(1 - textProgress) * 40}px)`,
+                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                          }}
+                        >
+                          {planet.label}
+                        </p>
 
-                  <h2
-                    className="text-xl font-semibold tracking-[0.08em] text-foreground"
-                    style={{
-                      opacity: progress,
-                      transform: `translateY(${(1 - progress) * 70}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                    }}
-                  >
-                    {planet.title}
-                  </h2>
+                        <h2
+                          className="text-xl font-semibold tracking-[0.08em] text-foreground"
+                          style={{
+                            opacity: textProgress,
+                            transform: `translateY(${(1 - textProgress) * 40}px)`,
+                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s',
+                          }}
+                        >
+                          {planet.title}
+                        </h2>
 
-                  <p
-                    className="text-sm leading-relaxed text-foreground/90"
-                    style={{
-                      opacity: progress,
-                      transform: `translateY(${(1 - progress) * 80}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                    }}
-                  >
-                    {planet.body}
-                  </p>
+                        <p
+                          className="text-sm leading-relaxed text-foreground/90"
+                          style={{
+                            opacity: textProgress,
+                            transform: `translateY(${(1 - textProgress) * 40}px)`,
+                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s',
+                          }}
+                        >
+                          {planet.body}
+                        </p>
 
-                  <p
-                    className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70"
-                    style={{
-                      opacity: progress * 0.7,
-                      transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                    }}
-                  >
-                    {planet.meta}
-                  </p>
+                        <p
+                          className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70"
+                          style={{
+                            opacity: textProgress * 0.9,
+                            transform: `translateY(${(1 - textProgress) * 40}px)`,
+                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s',
+                          }}
+                        >
+                          {planet.meta}
+                        </p>
+                      </>
+                    );
+                  })()}
                 </article>
               </div>
             </section>
@@ -571,8 +584,8 @@ const PlanetJourney = () => {
         </div>
       )}
 
-      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)] animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
-        Scroll to travel between worlds  
+      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 w-full text-center text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)] animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
+        Scroll to travel between worlds
       </div>
 
 
@@ -584,7 +597,7 @@ const PlanetJourney = () => {
             onClick={() => {
               sectionRefs.current[index]?.scrollIntoView({ 
                 behavior: 'smooth',
-                block: 'start'
+                block: 'center'
               });
             }}
             className={`group relative transition-all duration-300 ${
