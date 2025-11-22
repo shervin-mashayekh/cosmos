@@ -107,6 +107,7 @@ const PlanetJourney = () => {
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevActiveIndex, setPrevActiveIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState<number[]>(Array(planets.length).fill(0));
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -134,6 +135,42 @@ const PlanetJourney = () => {
       document.head.appendChild(canonical);
     }
     canonical.href = window.location.href;
+  }, []);
+
+  // Track scroll progress for smooth transitions
+  useEffect(() => {
+    const root = scrollRef.current;
+    if (!root) return;
+
+    const handleScroll = () => {
+      const newProgress = sectionRefs.current.map((section, index) => {
+        if (!section) return 0;
+        
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        // Calculate how far into view the section is (0 to 1)
+        const sectionTop = rect.top;
+        const sectionHeight = rect.height;
+        
+        // Progress is 0 when section is below viewport, 1 when centered, 0 when above
+        let progress = 0;
+        if (sectionTop <= windowHeight / 2 && sectionTop >= -sectionHeight / 2) {
+          // Section is in the "active" zone
+          progress = 1 - Math.abs(sectionTop - windowHeight / 2) / (windowHeight / 2);
+          progress = Math.max(0, Math.min(1, progress));
+        }
+        
+        return progress;
+      });
+      
+      setScrollProgress(newProgress);
+    };
+
+    root.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial calculation
+    
+    return () => root.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Track previous index for transition direction
@@ -255,6 +292,25 @@ const PlanetJourney = () => {
 
         {planets.map((planet, index) => {
           const isActive = index === activeIndex;
+          const progress = scrollProgress[index] || 0;
+          
+          // Interpolate values based on scroll progress
+          const scale = 0 + progress * 1.8; // 0 to 1.8
+          const translateX = -120 + progress * 120; // -120% to 0%
+          const rotate = -45 + progress * 45; // -45deg to 0deg
+          const opacity = progress;
+          const blur = 8 - progress * 8; // 8px to 0px
+          
+          // Trail effects
+          const trail1Scale = 0.3 + progress * 0.2;
+          const trail1TranslateX = -100 + progress * 20;
+          const trail1Rotate = -35 + progress * 10;
+          const trail1Opacity = 0.1 * (1 - progress);
+          
+          const trail2Scale = 0.5 + progress * 0.3;
+          const trail2TranslateX = -80 + progress * 16;
+          const trail2Rotate = -25 + progress * 5;
+          const trail2Opacity = 0.15 * (1 - progress);
 
           return (
             <section
@@ -265,76 +321,83 @@ const PlanetJourney = () => {
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
                 <div className="relative flex-shrink-0">
-                  {/* Motion trail effect - always coming from left */}
-                  {!isActive && (
-                    <>
-                      <img
-                        src={planet.image}
-                        alt=""
-                        aria-hidden="true"
-                        className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.15] blur-[2px] scale-[0.5] -translate-x-[80%] translate-y-0 -rotate-[25deg]"
-                        style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
-                      />
-                      <img
-                        src={planet.image}
-                        alt=""
-                        aria-hidden="true"
-                        className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.1] blur-[4px] scale-[0.3] -translate-x-[100%] translate-y-0 -rotate-[35deg]"
-                        style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
-                      />
-                    </>
-                  )}
+                  {/* Motion trail effect - scroll-driven */}
+                  <img
+                    src={planet.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
+                    style={{ 
+                      clipPath: 'inset(12% 12% 12% 12%)',
+                      transform: `translateX(${trail2TranslateX}%) rotate(${trail2Rotate}deg) scale(${trail2Scale})`,
+                      opacity: trail2Opacity,
+                      filter: 'blur(2px)'
+                    }}
+                  />
+                  <img
+                    src={planet.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
+                    style={{ 
+                      clipPath: 'inset(12% 12% 12% 12%)',
+                      transform: `translateX(${trail1TranslateX}%) rotate(${trail1Rotate}deg) scale(${trail1Scale})`,
+                      opacity: trail1Opacity,
+                      filter: 'blur(4px)'
+                    }}
+                  />
                   
-                  {/* Main planet with motion blur during transition - always from left */}
+                  {/* Main planet - scroll-driven animation */}
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-in-out origin-center ${
-                      isActive
-                        ? "opacity-100 scale-[1.8] translate-x-0 translate-y-0 rotate-0 blur-0"
-                        : "opacity-0 scale-0 -translate-x-[120%] translate-y-0 -rotate-45 blur-[8px]"
-                    }`}
-                    style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
+                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
+                    style={{ 
+                      clipPath: 'inset(12% 12% 12% 12%)',
+                      transform: `translateX(${translateX}%) rotate(${rotate}deg) scale(${scale})`,
+                      opacity: opacity,
+                      filter: `blur(${blur}px)`
+                    }}
                   />
                 </div>
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-400 ease-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground/80 delay-400"
-                        : "opacity-0 translate-y-6 text-foreground/0 delay-0"
-                    }`}
+                    className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80 transition-none"
+                    style={{
+                      opacity: progress * 0.8,
+                      transform: `translateY(${(1 - progress) * 24}px)`
+                    }}
                   >
                     {planet.label}
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-400 ease-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground delay-500"
-                        : "opacity-0 translate-y-8 text-foreground/0 delay-0"
-                    }`}
+                    className="text-xl font-semibold tracking-[0.08em] text-foreground transition-none"
+                    style={{
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 32}px)`
+                    }}
                   >
                     {planet.title}
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed transition-all duration-400 ease-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground/90 delay-600"
-                        : "opacity-0 translate-y-10 text-foreground/0 delay-0"
-                    }`}
+                    className="text-sm leading-relaxed text-foreground/90 transition-none"
+                    style={{
+                      opacity: progress * 0.9,
+                      transform: `translateY(${(1 - progress) * 40}px)`
+                    }}
                   >
                     {planet.body}
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-400 ease-out ${
-                      isActive
-                        ? "opacity-100 translate-y-0 text-foreground/70 delay-700"
-                        : "opacity-0 translate-y-8 text-foreground/0 delay-0"
-                    }`}
+                    className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70 transition-none"
+                    style={{
+                      opacity: progress * 0.7,
+                      transform: `translateY(${(1 - progress) * 32}px)`
+                    }}
                   >
                     {planet.meta}
                   </p>
