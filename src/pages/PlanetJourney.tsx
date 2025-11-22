@@ -108,6 +108,8 @@ const PlanetJourney = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevActiveIndex, setPrevActiveIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState<number[]>(Array(planets.length).fill(0));
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -136,6 +138,54 @@ const PlanetJourney = () => {
     }
     canonical.href = window.location.href;
   }, []);
+
+  // Smooth mouse wheel scrolling
+  useEffect(() => {
+    const root = scrollRef.current;
+    if (!root) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      // Clear existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      if (isScrollingRef.current) return;
+      
+      const delta = e.deltaY;
+      const threshold = 50; // Minimum scroll amount to trigger
+      
+      if (Math.abs(delta) > threshold) {
+        isScrollingRef.current = true;
+        
+        const direction = delta > 0 ? 1 : -1;
+        const nextIndex = Math.max(0, Math.min(activeIndex + direction, planets.length - 1));
+        
+        if (nextIndex !== activeIndex && sectionRefs.current[nextIndex]) {
+          sectionRefs.current[nextIndex]?.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+        
+        // Reset scrolling flag after animation
+        scrollTimeoutRef.current = setTimeout(() => {
+          isScrollingRef.current = false;
+        }, 800);
+      }
+    };
+
+    root.addEventListener('wheel', handleWheel, { passive: false });
+    
+    return () => {
+      root.removeEventListener('wheel', handleWheel);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [activeIndex]);
 
   // Track scroll progress for smooth transitions
   useEffect(() => {
@@ -297,8 +347,8 @@ const PlanetJourney = () => {
           
           // Interpolate values based on scroll progress
           // Starting point: 30% from left, small scale
-          // Ending point: centered (0%), full scale
-          const scale = 0.8 + progress * 1.0; // 0.8 to 1.8
+          // Ending point: centered (0%), 20% smaller final size (1.44 instead of 1.8)
+          const scale = 0.8 + progress * 0.64; // 0.8 to 1.44 (20% smaller than 1.8)
           const translateX = -30 + progress * 30; // -30% to 0%
           const rotate = -20 + progress * 20; // -20deg to 0deg
           const opacity = Math.max(0.3, progress); // Always somewhat visible
