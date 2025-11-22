@@ -21,7 +21,7 @@ interface Planet {
 const planets: Planet[] = [
   {
     id: 1,
-    label: "Planet One",
+    label: "Homeland - Core Belief",
     title: "Homeland  Core Belief",
     body:
       "Replace this with your real thematic analysis. This planet holds the gravitational centre of the story world  the shared belief that makes everything else make sense.",
@@ -30,7 +30,7 @@ const planets: Planet[] = [
   },
   {
     id: 2,
-    label: "Planet Two",
+    label: "Homeland - Defining Conflict",
     title: "Homeland  Defining Conflict",
     body:
       "Here lives the fracture line. This is where the shared belief is tested, bent, or broken  the tensions and double binds that generate drama.",
@@ -39,7 +39,7 @@ const planets: Planet[] = [
   },
   {
     id: 3,
-    label: "Planet Three",
+    label: "Homeland - Environmental Context",
     title: "Homeland  Environmental Context",
     body:
       "This planet describes the weather of the world  the physical, historical, and emotional environment that shapes everyday life.",
@@ -48,7 +48,7 @@ const planets: Planet[] = [
   },
   {
     id: 4,
-    label: "Planet Four",
+    label: "Hierarchy - Social Stratification",
     title: "Hierarchy  Social Stratification",
     body:
       "This world maps who rises, who falls, and why. It reveals how status, class, and access are distributed in this cosmos.",
@@ -57,7 +57,7 @@ const planets: Planet[] = [
   },
   {
     id: 5,
-    label: "Planet Five",
+    label: "Hierarchy - Audience Agency",
     title: "Hierarchy  Audience Agency",
     body:
       "This planet explores how much control people feel they have  over themselves, over others, and over the systems that surround them.",
@@ -66,7 +66,7 @@ const planets: Planet[] = [
   },
   {
     id: 6,
-    label: "Planet Six",
+    label: "Hierarchy - Brand as Catalyst",
     title: "Hierarchy  Brand as Catalyst",
     body:
       "Here we chart the brands gravitational pull: how it disrupts, amplifies, or stabilises the existing order of things.",
@@ -75,7 +75,7 @@ const planets: Planet[] = [
   },
   {
     id: 7,
-    label: "Planet Seven",
+    label: "Habitat - Magical Covenant",
     title: "Habitat  Magical Covenant",
     body:
       "This planet holds the rules of the ritual: what counts as power, what it costs, and what binds people to that covenant.",
@@ -84,7 +84,7 @@ const planets: Planet[] = [
   },
   {
     id: 8,
-    label: "Planet Eight",
+    label: "Habitat - Social Fabric",
     title: "Habitat  Social Fabric",
     body:
       "Here we see how people are stitched together: kinship, friendship, alliances, rivalries  and what keeps those threads from tearing.",
@@ -93,7 +93,7 @@ const planets: Planet[] = [
   },
   {
     id: 9,
-    label: "Planet Nine",
+    label: "Habitat - Collective Resilience",
     title: "Habitat  Collective Resilience",
     body:
       "The final world asks: what endures? It traces the rituals, stories, and infrastructures that help this cosmos survive disruption.",
@@ -389,31 +389,6 @@ const PlanetJourney = () => {
         </div>
       )}
 
-      {/* Go to top button - appears after third planet */}
-      {activeIndex >= 3 && (
-        <button
-          onClick={() => {
-            sectionRefs.current[0]?.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }}
-          className="fixed top-8 right-8 z-30 w-12 h-12 rounded-full bg-foreground/10 hover:bg-foreground/20 backdrop-blur-sm border border-foreground/20 transition-all duration-300 flex items-center justify-center group animate-fade-in"
-          aria-label="Go to top"
-        >
-          <svg 
-            className="w-5 h-5 text-foreground/80 group-hover:text-foreground transition-colors" 
-            fill="none" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth="2" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path d="M5 10l7-7m0 0l7 7m-7-7v18" />
-          </svg>
-        </button>
-      )}
 
       {/* Vertical planet progress indicator */}
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
