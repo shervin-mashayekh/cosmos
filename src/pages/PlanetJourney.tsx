@@ -292,27 +292,27 @@ const PlanetJourney = () => {
 
   return (
     <div className="relative h-screen bg-[#000000] text-foreground">
-      {/* Dramatic starry space background */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden animate-fade-in">
-        {/* Deep space gradient with purple/blue tones */}
+      {/* Static starry space background */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        {/* Deep space gradient with purple/blue tones - completely static */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#020208] to-[#000000]" />
         
-        {/* Galaxy fog effect */}
-        <div className="absolute inset-0 opacity-25 animate-fade-in" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
+        {/* Static galaxy fog effect */}
+        <div className="absolute inset-0 opacity-25">
           <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/15 blur-[100px] rounded-full" />
           <div className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/8 blur-[140px] rounded-full -translate-x-1/2" />
         </div>
         
-        {/* Multiple star layers for depth */}
-        <div className="absolute inset-0 animate-fade-in" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
+        {/* Static star field - no movement */}
+        <div className="absolute inset-0">
           {[...Array(200)].map((_, i) => {
             const size = Math.random() * 3 + 0.5;
             const brightness = Math.random();
             return (
               <div
                 key={`star-${i}`}
-                className="absolute rounded-full transition-none"
+                className="absolute rounded-full"
                 style={{
                   width: size + 'px',
                   height: size + 'px',
@@ -321,15 +321,16 @@ const PlanetJourney = () => {
                   backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
                   opacity: Math.random() * 0.6 + 0.4,
                   boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
+                  transform: 'none',
                 }}
               />
             );
           })}
         </div>
 
-        {/* Additional nebula-like glow effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)] animate-fade-in" style={{ animationDelay: '0.6s', animationFillMode: 'both' }} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)] animate-fade-in" style={{ animationDelay: '0.6s', animationFillMode: 'both' }} />
+        {/* Static nebula glow effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)]" />
       </div>
 
       <main
