@@ -287,10 +287,10 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
+                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-1000 ease-out ${
                       isActive
-                        ? "opacity-100 scale-[1.3] translate-y-0 animate-[spin_40s_linear_infinite]"
-                        : "opacity-0 scale-[1.1] translate-y-12"
+                        ? "opacity-100 scale-[1.8] translate-y-0 animate-[spin_40s_linear_infinite]"
+                        : "opacity-0 scale-[0.6] translate-y-12"
                     }`}
                     style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                   />
