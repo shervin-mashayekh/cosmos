@@ -191,50 +191,73 @@ const PlanetJourney = () => {
   };
 
   const layerOffset = (multiplier: number) =>
-    `translate3d(0, ${scrollY * multiplier}px, 0)`;
+    `translate3d(0, ${scrollY * multiplier * 0.8}px, 0)`;
 
   return (
     <div className="relative h-screen bg-background text-foreground">
-      {/* Parallax space background with multiple planet layers */}
+      {/* Dramatic starry space background */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--background)),#000_70%)]" />
+        {/* Deep space gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#050510] to-[#000000]" />
+        
+        {/* Multiple star layers for depth */}
+        <div className="absolute inset-0">
+          {[...Array(150)].map((_, i) => (
+            <div
+              key={`star-${i}`}
+              className="absolute rounded-full bg-white animate-pulse"
+              style={{
+                width: Math.random() * 2.5 + 0.5 + 'px',
+                height: Math.random() * 2.5 + 0.5 + 'px',
+                top: Math.random() * 100 + '%',
+                left: Math.random() * 100 + '%',
+                opacity: Math.random() * 0.8 + 0.2,
+                animationDelay: Math.random() * 4 + 's',
+                animationDuration: Math.random() * 3 + 1.5 + 's',
+              }}
+            />
+          ))}
+        </div>
 
+        {/* Parallax planet layers - moving dramatically with scroll */}
         <img
           src={planet5}
           alt="Radiant stellar core glowing at the centre of the thematic skyfield"
-          className="absolute left-1/2 top-[-20%] w-[520px] max-w-[70vw] -translate-x-1/2 opacity-70 blur-[1px]"
-          style={{ transform: layerOffset(0.15) }}
+          className="absolute left-1/2 top-[-20%] w-[520px] max-w-[70vw] -translate-x-1/2 opacity-40 blur-[2px] transition-transform duration-75 ease-out"
+          style={{ transform: `translateX(-50%) ${layerOffset(0.6)}` }}
         />
 
         <img
           src={planet1}
           alt="Lava planet drifting in the upper left of the skyfield"
-          className="absolute -left-32 top-1/3 w-72 max-w-[40vw] opacity-60"
-          style={{ transform: layerOffset(0.08) }}
+          className="absolute -left-32 top-1/3 w-72 max-w-[40vw] opacity-35 blur-sm transition-transform duration-75 ease-out"
+          style={{ transform: layerOffset(0.4) }}
         />
 
         <img
           src={planet2}
           alt="Icy blue planet in the upper right of the skyfield"
-          className="absolute -right-20 top-[18%] w-80 max-w-[45vw] opacity-55"
-          style={{ transform: layerOffset(0.05) }}
+          className="absolute -right-20 top-[18%] w-80 max-w-[45vw] opacity-30 blur-sm transition-transform duration-75 ease-out"
+          style={{ transform: layerOffset(0.3) }}
         />
 
         <img
           src={planet7}
           alt="Prismatic planet anchoring the lower left of the skyfield"
-          className="absolute -left-28 bottom-[-10%] w-80 max-w-[45vw] opacity-55"
-          style={{ transform: layerOffset(0.12) }}
+          className="absolute -left-28 bottom-[-10%] w-80 max-w-[45vw] opacity-35 blur-sm transition-transform duration-75 ease-out"
+          style={{ transform: layerOffset(0.5) }}
         />
 
         <img
           src={planet9}
           alt="Molten red planet hovering near the lower right horizon"
-          className="absolute -right-24 bottom-[-12%] w-[360px] max-w-[55vw] opacity-65"
-          style={{ transform: layerOffset(0.18) }}
+          className="absolute -right-24 bottom-[-12%] w-[360px] max-w-[55vw] opacity-40 blur-[1px] transition-transform duration-75 ease-out"
+          style={{ transform: layerOffset(0.7) }}
         />
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_60%)]" />
+        {/* Additional nebula-like glow effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(138,43,226,0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(0,100,255,0.06),transparent_50%)]" />
       </div>
 
       <main
@@ -263,50 +286,50 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] transition-all duration-700 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
+                    className={`w-[min(38vw,480px)] transition-all duration-500 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
                       isActive
                         ? "opacity-100 scale-100 translate-y-0 animate-[spin_40s_linear_infinite]"
-                        : "opacity-0 scale-90 translate-y-10"
+                        : "opacity-0 scale-85 translate-y-16"
                     }`}
                   />
                 </div>
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-700 ease-out ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-500 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/80"
-                        : "opacity-0 translate-y-4 text-foreground/0"
+                        : "opacity-0 translate-y-6 text-foreground/0"
                     }`}
                   >
                     {planet.label}
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-700 ease-out ${
+                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-500 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground"
-                        : "opacity-0 translate-y-5 text-foreground/0"
+                        : "opacity-0 translate-y-8 text-foreground/0"
                     }`}
                   >
                     {planet.title}
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed transition-all duration-700 ease-out ${
+                    className={`text-sm leading-relaxed transition-all duration-500 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/90"
-                        : "opacity-0 translate-y-6 text-foreground/0"
+                        : "opacity-0 translate-y-10 text-foreground/0"
                     }`}
                   >
                     {planet.body}
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-700 ease-out ${
+                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-500 ease-out ${
                       isActive
                         ? "opacity-100 translate-y-0 text-foreground/70"
-                        : "opacity-0 translate-y-5 text-foreground/0"
+                        : "opacity-0 translate-y-8 text-foreground/0"
                     }`}
                   >
                     {planet.meta}
