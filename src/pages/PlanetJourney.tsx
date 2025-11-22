@@ -508,44 +508,40 @@ const PlanetJourney = () => {
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80 transition-all duration-500 ease-out"
+                    className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80"
                     style={{
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                      transitionDelay: '0ms'
                     }}
                   >
                     {planet.label}
                   </p>
 
                   <h2
-                    className="text-xl font-semibold tracking-[0.08em] text-foreground transition-all duration-500 ease-out"
+                    className="text-xl font-semibold tracking-[0.08em] text-foreground"
                     style={{
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 70}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                      transitionDelay: '50ms'
                     }}
                   >
                     {planet.title}
                   </h2>
 
                   <p
-                    className="text-sm leading-relaxed text-foreground/90 transition-all duration-500 ease-out"
+                    className="text-sm leading-relaxed text-foreground/90"
                     style={{
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 80}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                      transitionDelay: '100ms'
                     }}
                   >
                     {planet.body}
                   </p>
 
                   <p
-                    className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70 transition-all duration-500 ease-out"
+                    className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70"
                     style={{
                       opacity: progress * 0.7,
                       transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
-                      transitionDelay: '150ms'
                     }}
                   >
                     {planet.meta}
@@ -557,11 +553,7 @@ const PlanetJourney = () => {
         })}
       </main>
 
-      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)] animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
-        Scroll to travel between worlds  
-      </div>
-
-      {/* Keyboard controls hint - shows only on first slide */}
+      {/* Keyboard controls hint and scroll message */}
       {activeIndex === 0 && (
         <div 
           className="fixed bottom-20 left-1/2 z-30 -translate-x-1/2 animate-fade-in"
@@ -578,6 +570,10 @@ const PlanetJourney = () => {
           </div>
         </div>
       )}
+
+      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)] animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
+        Scroll to travel between worlds  
+      </div>
 
 
       {/* Vertical planet progress indicator */}
