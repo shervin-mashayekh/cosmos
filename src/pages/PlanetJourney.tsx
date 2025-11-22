@@ -255,8 +255,6 @@ const PlanetJourney = () => {
 
         {planets.map((planet, index) => {
           const isActive = index === activeIndex;
-          const isComingFromAbove = index > prevActiveIndex;
-          const isComingFromBelow = index < prevActiveIndex;
 
           return (
             <section
@@ -267,44 +265,34 @@ const PlanetJourney = () => {
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
                 <div className="relative flex-shrink-0">
-                  {/* Motion trail effect */}
+                  {/* Motion trail effect - always coming from left */}
                   {!isActive && (
                     <>
                       <img
                         src={planet.image}
                         alt=""
                         aria-hidden="true"
-                        className={`absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.15] blur-[2px] ${
-                          isComingFromAbove
-                            ? "scale-[0.5] translate-x-[80%] translate-y-[-40%] rotate-[35deg]"
-                            : "scale-[0.5] -translate-x-[80%] translate-y-[40%] -rotate-[35deg]"
-                        }`}
+                        className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.15] blur-[2px] scale-[0.5] -translate-x-[80%] translate-y-0 -rotate-[25deg]"
                         style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                       />
                       <img
                         src={planet.image}
                         alt=""
                         aria-hidden="true"
-                        className={`absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.1] blur-[4px] ${
-                          isComingFromAbove
-                            ? "scale-[0.3] translate-x-[60%] translate-y-[-30%] rotate-[25deg]"
-                            : "scale-[0.3] -translate-x-[60%] translate-y-[30%] -rotate-[25deg]"
-                        }`}
+                        className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out origin-center opacity-[0.1] blur-[4px] scale-[0.3] -translate-x-[100%] translate-y-0 -rotate-[35deg]"
                         style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                       />
                     </>
                   )}
                   
-                  {/* Main planet with motion blur during transition */}
+                  {/* Main planet with motion blur during transition - always from left */}
                   <img
                     src={planet.image}
                     alt={planet.title}
                     className={`relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-in-out origin-center ${
                       isActive
                         ? "opacity-100 scale-[1.8] translate-x-0 translate-y-0 rotate-0 blur-0"
-                        : isComingFromAbove
-                        ? "opacity-0 scale-0 translate-x-[100%] translate-y-[-50%] rotate-45 blur-[8px]"
-                        : "opacity-0 scale-0 -translate-x-[100%] translate-y-[50%] -rotate-45 blur-[8px]"
+                        : "opacity-0 scale-0 -translate-x-[120%] translate-y-0 -rotate-45 blur-[8px]"
                     }`}
                     style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                   />
