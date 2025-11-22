@@ -512,10 +512,10 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
+                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none animate-[spin_60s_linear_infinite]"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${translateX}%) rotate(${rotate}deg) scale(${scale})`,
+                      transform: `translateX(${translateX}%) scale(${scale}) rotate(${rotate}deg)`,
                       opacity: opacity,
                       filter: `blur(${blur}px)`
                     }}
