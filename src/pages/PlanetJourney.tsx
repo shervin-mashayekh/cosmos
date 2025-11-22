@@ -22,82 +22,82 @@ const planets: Planet[] = [
   {
     id: 1,
     label: "Homeland - Core Belief",
-    title: "Homeland  Core Belief",
+    title: "Homeland  Core Belief",
     body:
-      "Replace this with your real thematic analysis. This planet holds the gravitational centre of the story world  the shared belief that makes everything else make sense.",
-    meta: "Planet 1 of 9  Scroll to continue",
+      "Replace this with your real thematic analysis. This planet holds the gravitational centre of the story world  the shared belief that makes everything else make sense.",
+    meta: "Planet 1 of 9",
     image: planet1,
   },
   {
     id: 2,
     label: "Homeland - Defining Conflict",
-    title: "Homeland  Defining Conflict",
+    title: "Homeland  Defining Conflict",
     body:
-      "Here lives the fracture line. This is where the shared belief is tested, bent, or broken  the tensions and double binds that generate drama.",
-    meta: "Planet 2 of 9  Scroll to continue",
+      "Here lives the fracture line. This is where the shared belief is tested, bent, or broken  the tensions and double binds that generate drama.",
+    meta: "Planet 2 of 9",
     image: planet2,
   },
   {
     id: 3,
     label: "Homeland - Environmental Context",
-    title: "Homeland  Environmental Context",
+    title: "Homeland  Environmental Context",
     body:
-      "This planet describes the weather of the world  the physical, historical, and emotional environment that shapes everyday life.",
-    meta: "Planet 3 of 9  Scroll to continue",
+      "This planet describes the weather of the world  the physical, historical, and emotional environment that shapes everyday life.",
+    meta: "Planet 3 of 9",
     image: planet3,
   },
   {
     id: 4,
     label: "Hierarchy - Social Stratification",
-    title: "Hierarchy  Social Stratification",
+    title: "Hierarchy  Social Stratification",
     body:
       "This world maps who rises, who falls, and why. It reveals how status, class, and access are distributed in this cosmos.",
-    meta: "Planet 4 of 9  Scroll to continue",
+    meta: "Planet 4 of 9",
     image: planet4,
   },
   {
     id: 5,
     label: "Hierarchy - Audience Agency",
-    title: "Hierarchy  Audience Agency",
+    title: "Hierarchy  Audience Agency",
     body:
-      "This planet explores how much control people feel they have  over themselves, over others, and over the systems that surround them.",
-    meta: "Planet 5 of 9  Scroll to continue",
+      "This planet explores how much control people feel they have  over themselves, over others, and over the systems that surround them.",
+    meta: "Planet 5 of 9",
     image: planet5,
   },
   {
     id: 6,
     label: "Hierarchy - Brand as Catalyst",
-    title: "Hierarchy  Brand as Catalyst",
+    title: "Hierarchy  Brand as Catalyst",
     body:
-      "Here we chart the brands gravitational pull: how it disrupts, amplifies, or stabilises the existing order of things.",
-    meta: "Planet 6 of 9  Scroll to continue",
+      "Here we chart the brands gravitational pull: how it disrupts, amplifies, or stabilises the existing order of things.",
+    meta: "Planet 6 of 9",
     image: planet6,
   },
   {
     id: 7,
     label: "Habitat - Magical Covenant",
-    title: "Habitat  Magical Covenant",
+    title: "Habitat  Magical Covenant",
     body:
       "This planet holds the rules of the ritual: what counts as power, what it costs, and what binds people to that covenant.",
-    meta: "Planet 7 of 9  Scroll to continue",
+    meta: "Planet 7 of 9",
     image: planet7,
   },
   {
     id: 8,
     label: "Habitat - Social Fabric",
-    title: "Habitat  Social Fabric",
+    title: "Habitat  Social Fabric",
     body:
-      "Here we see how people are stitched together: kinship, friendship, alliances, rivalries  and what keeps those threads from tearing.",
-    meta: "Planet 8 of 9  Scroll to continue",
+      "Here we see how people are stitched together: kinship, friendship, alliances, rivalries  and what keeps those threads from tearing.",
+    meta: "Planet 8 of 9",
     image: planet8,
   },
   {
     id: 9,
     label: "Habitat - Collective Resilience",
-    title: "Habitat  Collective Resilience",
+    title: "Habitat  Collective Resilience",
     body:
       "The final world asks: what endures? It traces the rituals, stories, and infrastructures that help this cosmos survive disruption.",
-    meta: "Planet 9 of 9  Scroll to traverse back up",
+    meta: "Planet 9 of 9",
     image: planet9,
   },
 ];
@@ -134,7 +134,7 @@ const PlanetJourney = () => {
 
   // Basic SEO for this landing page
   useEffect(() => {
-    document.title = "Thematic Skyfield  Planet Journey";
+    document.title = "Thematic Skyfield  Planet Journey";
 
     const description =
       "Scroll through nine thematic planets that map the narrative cosmos of your brand.";
@@ -428,7 +428,7 @@ const PlanetJourney = () => {
         aria-label="Thematic Skyfield planet journey"
       >
         <div className="sr-only">
-          <h1>Thematic Skyfield  Planet Journey</h1>
+          <h1>Thematic Skyfield  Planet Journey</h1>
         </div>
 
         {planets.map((planet, index) => {
@@ -436,7 +436,7 @@ const PlanetJourney = () => {
           const progress = scrollProgress[index] || 0;
           
           // More dramatic interpolation for space travel feel
-          const scale = 0.3 + progress * 1.4; // 0.3 to 1.7 - planets start tiny and far away
+          const scale = 0.3 + progress * 1.06; // 0.3 to 1.36 - planets start tiny and far away (20% smaller final size)
           const translateX = -30 + progress * 30; // -30% to 0% - more horizontal travel
           const translateZ = (1 - progress) * 200; // Simulate depth
           const rotate = -30 + progress * 30; // -30deg to 0deg
@@ -508,7 +508,7 @@ const PlanetJourney = () => {
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80 transition-none"
+                    className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80 transition-all duration-500 ease-out"
                     style={{
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
@@ -519,7 +519,7 @@ const PlanetJourney = () => {
                   </p>
 
                   <h2
-                    className="text-xl font-semibold tracking-[0.08em] text-foreground transition-none"
+                    className="text-xl font-semibold tracking-[0.08em] text-foreground transition-all duration-500 ease-out"
                     style={{
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 70}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
@@ -530,7 +530,7 @@ const PlanetJourney = () => {
                   </h2>
 
                   <p
-                    className="text-sm leading-relaxed text-foreground/90 transition-none"
+                    className="text-sm leading-relaxed text-foreground/90 transition-all duration-500 ease-out"
                     style={{
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 80}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
@@ -541,7 +541,7 @@ const PlanetJourney = () => {
                   </p>
 
                   <p
-                    className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70 transition-none"
+                    className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70 transition-all duration-500 ease-out"
                     style={{
                       opacity: progress * 0.7,
                       transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
