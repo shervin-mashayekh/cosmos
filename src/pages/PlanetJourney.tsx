@@ -212,11 +212,10 @@ const PlanetJourney = () => {
           {[...Array(200)].map((_, i) => {
             const size = Math.random() * 3 + 0.5;
             const brightness = Math.random();
-            const shouldAnimate = Math.random() > 0.6; // Only 40% of stars animate
             return (
               <div
                 key={`star-${i}`}
-                className={`absolute rounded-full ${shouldAnimate ? 'animate-pulse' : ''}`}
+                className="absolute rounded-full"
                 style={{
                   width: size + 'px',
                   height: size + 'px',
@@ -225,8 +224,6 @@ const PlanetJourney = () => {
                   backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
                   opacity: Math.random() * 0.6 + 0.4,
                   boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
-                  animationDelay: shouldAnimate ? Math.random() * 32 + 's' : undefined,
-                  animationDuration: shouldAnimate ? Math.random() * 20 + 16 + 's' : undefined,
                 }}
               />
             );
