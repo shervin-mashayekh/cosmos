@@ -288,7 +288,8 @@ const PlanetJourney = () => {
                       isActive
                         ? "opacity-100 scale-100 translate-y-0 animate-[spin_40s_linear_infinite]"
                         : "opacity-0 scale-90 translate-y-12"
-                    }`}
+                    } ${index === 5 ? 'scale-[1.3]' : ''}`}
+                    style={index === 5 ? { clipPath: 'inset(12% 12% 12% 12%)' } : undefined}
                   />
                 </div>
 
