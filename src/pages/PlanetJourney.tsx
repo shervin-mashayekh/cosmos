@@ -242,23 +242,17 @@ const PlanetJourney = () => {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
         e.preventDefault();
         const nextIndex = Math.min(activeIndex + 1, planets.length - 1);
-        if (nextIndex !== activeIndex && sectionRefs.current[nextIndex]) {
-          sectionRefs.current[nextIndex]?.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'center'
-          });
+        if (nextIndex !== activeIndex) {
+          scrollToSection(nextIndex);
         }
-      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
         e.preventDefault();
         const prevIndex = Math.max(activeIndex - 1, 0);
-        if (prevIndex !== activeIndex && sectionRefs.current[prevIndex]) {
-          sectionRefs.current[prevIndex]?.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'center'
-          });
+        if (prevIndex !== activeIndex) {
+          scrollToSection(prevIndex);
         }
       }
     };
@@ -279,6 +273,29 @@ const PlanetJourney = () => {
 
   const setSectionRef = (index: number) => (el: HTMLDivElement | null) => {
     sectionRefs.current[index] = el;
+  };
+
+  const scrollToSection = (index: number) => {
+    const root = scrollRef.current;
+    const section = sectionRefs.current[index];
+    if (!root || !section) return;
+
+    // Distance from top of scroll container to top of section
+    const sectionTop = section.offsetTop;
+
+    // We want the *center* of the section to align with the center of the scroll viewport
+    const target =
+      sectionTop + section.offsetHeight / 2 - root.clientHeight / 2;
+
+    const clampedTarget = Math.max(
+      0,
+      Math.min(target, root.scrollHeight - root.clientHeight)
+    );
+
+    root.scrollTo({
+      top: clampedTarget,
+      behavior: "smooth",
+    });
   };
 
   // Calculate dynamic background color based on active planet
@@ -424,7 +441,6 @@ const PlanetJourney = () => {
       <main
         ref={scrollRef}
         className="h-screen overflow-y-scroll scroll-smooth"
-        style={{ scrollPaddingTop: '50vh' }}
         aria-label="Thematic Skyfield planet journey"
       >
         <div className="sr-only">
@@ -508,8 +524,10 @@ const PlanetJourney = () => {
 
                 <article className="relative max-w-md space-y-3">
                   {(() => {
-                    // Calculate text-specific progress (triggered when planet lands at ~85% scroll)
-                    const textProgress = progress > 0.85 ? Math.pow((progress - 0.85) / 0.15, 1.5) : 0;
+                    // Synchronized text animation - appears together with planet
+                    let textProgress = progress;
+                    // Optional ease-out for smoother ending
+                    textProgress = 1 - Math.pow(1 - textProgress, 2);
                     
                     return (
                       <>
@@ -518,7 +536,6 @@ const PlanetJourney = () => {
                           style={{
                             opacity: textProgress,
                             transform: `translateY(${(1 - textProgress) * 40}px)`,
-                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                           }}
                         >
                           {planet.label}
@@ -529,7 +546,6 @@ const PlanetJourney = () => {
                           style={{
                             opacity: textProgress,
                             transform: `translateY(${(1 - textProgress) * 40}px)`,
-                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s',
                           }}
                         >
                           {planet.title}
@@ -540,7 +556,6 @@ const PlanetJourney = () => {
                           style={{
                             opacity: textProgress,
                             transform: `translateY(${(1 - textProgress) * 40}px)`,
-                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s',
                           }}
                         >
                           {planet.body}
@@ -551,7 +566,6 @@ const PlanetJourney = () => {
                           style={{
                             opacity: textProgress * 0.9,
                             transform: `translateY(${(1 - textProgress) * 40}px)`,
-                            transition: 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s',
                           }}
                         >
                           {planet.meta}
@@ -584,8 +598,13 @@ const PlanetJourney = () => {
         </div>
       )}
 
-      <div className="pointer-events-none fixed bottom-5 left-1/2 z-20 -translate-x-1/2 w-full text-center text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)] animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
-        Scroll to travel between worlds
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-5 z-20 flex justify-center animate-fade-in"
+        style={{ animationDelay: '0.8s', animationFillMode: 'both' }}
+      >
+        <span className="text-[11px] uppercase tracking-[0.16em] text-foreground/80 drop-shadow-[0_0_10px_rgba(0,0,0,0.95)]">
+          Scroll to travel between worlds
+        </span>
       </div>
 
 
@@ -594,12 +613,7 @@ const PlanetJourney = () => {
         {planets.map((planet, index) => (
           <button
             key={planet.id}
-            onClick={() => {
-              sectionRefs.current[index]?.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'center'
-              });
-            }}
+            onClick={() => scrollToSection(index)}
             className={`group relative transition-all duration-300 ${
               index === activeIndex ? 'scale-125' : 'scale-100 hover:scale-110'
             }`}
