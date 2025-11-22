@@ -186,6 +186,34 @@ const PlanetJourney = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const nextIndex = Math.min(activeIndex + 1, planets.length - 1);
+        if (nextIndex !== activeIndex && sectionRefs.current[nextIndex]) {
+          sectionRefs.current[nextIndex]?.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const prevIndex = Math.max(activeIndex - 1, 0);
+        if (prevIndex !== activeIndex && sectionRefs.current[prevIndex]) {
+          sectionRefs.current[prevIndex]?.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeIndex]);
+
   const setSectionRef = (index: number) => (el: HTMLDivElement | null) => {
     sectionRefs.current[index] = el;
   };
