@@ -11,6 +11,7 @@ interface Planet3DProps {
 
 export const Planet3D = ({ imageUrl, progress, scale = 1 }: Planet3DProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
+  const glowRef = useRef<THREE.Mesh>(null);
   const texture = useLoader(TextureLoader, imageUrl);
 
   // Animate based on progress
@@ -28,6 +29,17 @@ export const Planet3D = ({ imageUrl, progress, scale = 1 }: Planet3DProps) => {
     meshRef.current.position.x = translateX;
     meshRef.current.rotation.y = rotateY;
     
+    // Apply same transformations to glow
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(targetScale * 1.15);
+      glowRef.current.position.x = translateX;
+      glowRef.current.rotation.y = rotateY;
+      
+      if (glowRef.current.material instanceof THREE.MeshBasicMaterial) {
+        glowRef.current.material.opacity = opacity * 0.3;
+      }
+    }
+    
     // Apply opacity through material
     if (meshRef.current.material instanceof THREE.MeshStandardMaterial) {
       meshRef.current.material.opacity = opacity;
@@ -36,24 +48,42 @@ export const Planet3D = ({ imageUrl, progress, scale = 1 }: Planet3DProps) => {
 
     // Subtle continuous rotation for life
     meshRef.current.rotation.y += 0.001;
+    if (glowRef.current) {
+      glowRef.current.rotation.y += 0.001;
+    }
   });
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[1, 64, 64]} />
-      <meshStandardMaterial 
-        map={texture} 
-        metalness={0.2}
-        roughness={0.8}
-        emissive="#111111"
-        emissiveIntensity={0.2}
-      />
-    </mesh>
+    <group>
+      {/* Glow layer */}
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[1, 64, 64]} />
+        <meshBasicMaterial 
+          color="#ffffff"
+          transparent
+          opacity={0.3}
+          side={THREE.BackSide}
+        />
+      </mesh>
+      
+      {/* Main planet sphere */}
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[1, 64, 64]} />
+        <meshStandardMaterial 
+          map={texture} 
+          metalness={0.1}
+          roughness={0.7}
+          emissive="#ffffff"
+          emissiveIntensity={0.15}
+        />
+      </mesh>
+    </group>
   );
 };
 
 export const Planet3DTrail = ({ imageUrl, progress, trailIndex }: { imageUrl: string; progress: number; trailIndex: number }) => {
   const meshRef = useRef<THREE.Mesh>(null);
+  const glowRef = useRef<THREE.Mesh>(null);
   const texture = useLoader(TextureLoader, imageUrl);
 
   useFrame(() => {
@@ -77,6 +107,16 @@ export const Planet3DTrail = ({ imageUrl, progress, trailIndex }: { imageUrl: st
     meshRef.current.position.x = trailTranslateX;
     meshRef.current.rotation.y = trailRotate;
 
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(trailScale * 1.15);
+      glowRef.current.position.x = trailTranslateX;
+      glowRef.current.rotation.y = trailRotate;
+      
+      if (glowRef.current.material instanceof THREE.MeshBasicMaterial) {
+        glowRef.current.material.opacity = trailOpacity * 0.25;
+      }
+    }
+
     if (meshRef.current.material instanceof THREE.MeshStandardMaterial) {
       meshRef.current.material.opacity = trailOpacity;
       meshRef.current.material.transparent = true;
@@ -84,14 +124,28 @@ export const Planet3DTrail = ({ imageUrl, progress, trailIndex }: { imageUrl: st
   });
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[1, 32, 32]} />
-      <meshStandardMaterial 
-        map={texture} 
-        metalness={0.1}
-        roughness={0.9}
-        transparent
-      />
-    </mesh>
+    <group>
+      {/* Glow layer for trail */}
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshBasicMaterial 
+          color="#ffffff"
+          transparent
+          opacity={0.25}
+          side={THREE.BackSide}
+        />
+      </mesh>
+      
+      {/* Trail sphere */}
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshStandardMaterial 
+          map={texture} 
+          metalness={0.1}
+          roughness={0.9}
+          transparent
+        />
+      </mesh>
+    </group>
   );
 };
