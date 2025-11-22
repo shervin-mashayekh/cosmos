@@ -106,7 +106,6 @@ const PlanetJourney = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
 
   // Basic SEO for this landing page
   useEffect(() => {
@@ -134,28 +133,6 @@ const PlanetJourney = () => {
       document.head.appendChild(canonical);
     }
     canonical.href = window.location.href;
-  }, []);
-
-  // Track scroll position inside the main scroll container for parallax
-  useEffect(() => {
-    const root = scrollRef.current;
-    if (!root) return;
-
-    let ticking = false;
-
-    const handleScroll = () => {
-      const top = root.scrollTop;
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollY(top);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    root.addEventListener("scroll", handleScroll);
-    return () => root.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Observe sections to trigger active animations similar to the original HTML
@@ -217,9 +194,6 @@ const PlanetJourney = () => {
   const setSectionRef = (index: number) => (el: HTMLDivElement | null) => {
     sectionRefs.current[index] = el;
   };
-
-  const layerOffset = (multiplier: number) =>
-    `translate3d(0, ${scrollY * multiplier * 0.05}px, 0)`;
 
   return (
     <div className="relative h-screen bg-[#000000] text-foreground">
