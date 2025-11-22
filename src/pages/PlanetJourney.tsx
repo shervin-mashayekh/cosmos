@@ -267,6 +267,16 @@ const PlanetJourney = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex]);
 
+  // Ensure first planet is centered on initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (scrollRef.current && sectionRefs.current[0]) {
+        scrollRef.current.scrollTop = 0;
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const setSectionRef = (index: number) => (el: HTMLDivElement | null) => {
     sectionRefs.current[index] = el;
   };
@@ -274,15 +284,15 @@ const PlanetJourney = () => {
   // Calculate dynamic background color based on active planet
   const getBackgroundColor = () => {
     const colors = [
-      { h: 280, s: 60, l: 8 },  // Purple tint
-      { h: 240, s: 50, l: 8 },  // Blue tint
-      { h: 200, s: 55, l: 8 },  // Cyan tint
-      { h: 340, s: 45, l: 8 },  // Pink tint
-      { h: 280, s: 50, l: 8 },  // Purple-pink
-      { h: 260, s: 55, l: 8 },  // Deep purple
-      { h: 220, s: 50, l: 8 },  // Blue-purple
-      { h: 300, s: 45, l: 8 },  // Magenta
-      { h: 270, s: 60, l: 8 },  // Violet
+      { h: 280, s: 60, l: 4 },  // Purple tint
+      { h: 240, s: 50, l: 4 },  // Blue tint
+      { h: 200, s: 55, l: 4 },  // Cyan tint
+      { h: 340, s: 45, l: 4 },  // Pink tint
+      { h: 280, s: 50, l: 4 },  // Purple-pink
+      { h: 260, s: 55, l: 4 },  // Deep purple
+      { h: 220, s: 50, l: 4 },  // Blue-purple
+      { h: 300, s: 45, l: 4 },  // Magenta
+      { h: 270, s: 60, l: 4 },  // Violet
     ];
     
     const current = colors[activeIndex];
@@ -323,7 +333,7 @@ const PlanetJourney = () => {
       {/* Parallax starry space background */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         {/* Dynamic galaxy fog effect that shifts with scroll */}
-        <div className="absolute inset-0 opacity-30 transition-transform duration-700">
+        <div className="absolute inset-0 opacity-15 transition-transform duration-700">
           <div 
             className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/20 blur-[120px] rounded-full"
             style={{ transform: `translate(${globalScrollProgress * -100}px, ${globalScrollProgress * 150}px)` }}
@@ -350,8 +360,8 @@ const PlanetJourney = () => {
                 top: star.top + '%',
                 left: star.left + '%',
                 backgroundColor: '#e0e7ff',
-                opacity: star.brightness * 0.4,
-                boxShadow: `0 0 ${star.size}px rgba(224, 231, 255, ${star.brightness * 0.3})`,
+                opacity: star.brightness * 0.24,
+                boxShadow: `0 0 ${star.size}px rgba(224, 231, 255, ${star.brightness * 0.18})`,
               }}
             />
           ))}
@@ -369,8 +379,8 @@ const PlanetJourney = () => {
                 top: star.top + '%',
                 left: star.left + '%',
                 backgroundColor: star.brightness > 0.6 ? '#ffffff' : '#e0e7ff',
-                opacity: star.brightness * 0.6,
-                boxShadow: `0 0 ${star.size * 1.5}px rgba(255, 255, 255, ${star.brightness * 0.4})`,
+                opacity: star.brightness * 0.36,
+                boxShadow: `0 0 ${star.size * 1.5}px rgba(255, 255, 255, ${star.brightness * 0.24})`,
               }}
             />
           ))}
@@ -388,8 +398,8 @@ const PlanetJourney = () => {
                 top: star.top + '%',
                 left: star.left + '%',
                 backgroundColor: '#ffffff',
-                opacity: star.brightness * 0.7 + 0.3,
-                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.brightness * 0.6})`,
+                opacity: star.brightness * 0.42 + 0.18,
+                boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.brightness * 0.36})`,
               }}
             />
           ))}
@@ -414,6 +424,7 @@ const PlanetJourney = () => {
       <main
         ref={scrollRef}
         className="h-screen overflow-y-scroll scroll-smooth"
+        style={{ scrollPaddingTop: '50vh' }}
         aria-label="Thematic Skyfield planet journey"
       >
         <div className="sr-only">
@@ -448,9 +459,9 @@ const PlanetJourney = () => {
               key={planet.id}
               ref={setSectionRef(index)}
               data-index={index}
-              className="relative flex h-[150vh] w-screen items-center justify-center px-[12vw]"
+              className={`relative flex w-screen items-center justify-center px-[12vw] ${index === 0 ? 'h-screen' : 'h-[150vh]'}`}
               style={{ 
-                minHeight: '150vh',
+                minHeight: index === 0 ? '100vh' : '150vh',
               }}
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
@@ -499,8 +510,9 @@ const PlanetJourney = () => {
                   <p
                     className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/80 transition-none"
                     style={{
-                      opacity: Math.max(0.2, progress * 0.8),
-                      transform: `translateY(${(1 - progress) * 20}px)`
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
+                      transitionDelay: '0ms'
                     }}
                   >
                     {planet.label}
@@ -509,8 +521,9 @@ const PlanetJourney = () => {
                   <h2
                     className="text-xl font-semibold tracking-[0.08em] text-foreground transition-none"
                     style={{
-                      opacity: Math.max(0.3, progress),
-                      transform: `translateY(${(1 - progress) * 24}px)`
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 70}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
+                      transitionDelay: '50ms'
                     }}
                   >
                     {planet.title}
@@ -519,8 +532,9 @@ const PlanetJourney = () => {
                   <p
                     className="text-sm leading-relaxed text-foreground/90 transition-none"
                     style={{
-                      opacity: Math.max(0.2, progress * 0.9),
-                      transform: `translateY(${(1 - progress) * 28}px)`
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 80}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
+                      transitionDelay: '100ms'
                     }}
                   >
                     {planet.body}
@@ -529,8 +543,9 @@ const PlanetJourney = () => {
                   <p
                     className="pt-2 text-[11px] uppercase tracking-[0.14em] text-foreground/70 transition-none"
                     style={{
-                      opacity: Math.max(0.2, progress * 0.7),
-                      transform: `translateY(${(1 - progress) * 20}px)`
+                      opacity: progress * 0.7,
+                      transform: `translateY(${(1 - progress) * 60}px) translateX(${(1 - progress) * 30}px) scale(${0.95 + progress * 0.05})`,
+                      transitionDelay: '150ms'
                     }}
                   >
                     {planet.meta}
