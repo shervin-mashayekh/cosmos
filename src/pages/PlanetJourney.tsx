@@ -261,10 +261,10 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] ${
+                    className={`w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] transition-all duration-700 ease-out animate-[spin_40s_linear_infinite] ${
                       isActive
-                        ? "opacity-100 scale-[1.8] translate-y-0 animate-[spin_40s_linear_infinite]"
-                        : "opacity-0 scale-[0.6] translate-y-12"
+                        ? "opacity-100 scale-[1.8] translate-y-0"
+                        : "opacity-0 scale-0 translate-y-0"
                     }`}
                     style={{ clipPath: 'inset(12% 12% 12% 12%)' }}
                   />
@@ -272,40 +272,40 @@ const PlanetJourney = () => {
 
                 <article className="relative max-w-md space-y-3">
                   <p
-                    className={`text-[11px] font-medium uppercase tracking-[0.18em] ${
+                    className={`text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-500 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground/80"
-                        : "opacity-0 translate-y-6 text-foreground/0"
+                        ? "opacity-100 translate-y-0 text-foreground/80 delay-500"
+                        : "opacity-0 translate-y-6 text-foreground/0 delay-0"
                     }`}
                   >
                     {planet.label}
                   </p>
 
                   <h2
-                    className={`text-xl font-semibold tracking-[0.08em] ${
+                    className={`text-xl font-semibold tracking-[0.08em] transition-all duration-500 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground"
-                        : "opacity-0 translate-y-8 text-foreground/0"
+                        ? "opacity-100 translate-y-0 text-foreground delay-600"
+                        : "opacity-0 translate-y-8 text-foreground/0 delay-0"
                     }`}
                   >
                     {planet.title}
                   </h2>
 
                   <p
-                    className={`text-sm leading-relaxed ${
+                    className={`text-sm leading-relaxed transition-all duration-500 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground/90"
-                        : "opacity-0 translate-y-10 text-foreground/0"
+                        ? "opacity-100 translate-y-0 text-foreground/90 delay-700"
+                        : "opacity-0 translate-y-10 text-foreground/0 delay-0"
                     }`}
                   >
                     {planet.body}
                   </p>
 
                   <p
-                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] ${
+                    className={`pt-2 text-[11px] uppercase tracking-[0.14em] transition-all duration-500 ease-out ${
                       isActive
-                        ? "opacity-100 translate-y-0 text-foreground/70"
-                        : "opacity-0 translate-y-8 text-foreground/0"
+                        ? "opacity-100 translate-y-0 text-foreground/70 delay-800"
+                        : "opacity-0 translate-y-8 text-foreground/0 delay-0"
                     }`}
                   >
                     {planet.meta}
