@@ -388,6 +388,32 @@ const PlanetJourney = () => {
           </div>
         </div>
       )}
+
+      {/* Go to top button - appears after third planet */}
+      {activeIndex >= 3 && (
+        <button
+          onClick={() => {
+            sectionRefs.current[0]?.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }}
+          className="fixed top-8 right-8 z-30 w-12 h-12 rounded-full bg-foreground/10 hover:bg-foreground/20 backdrop-blur-sm border border-foreground/20 transition-all duration-300 flex items-center justify-center group animate-fade-in"
+          aria-label="Go to top"
+        >
+          <svg 
+            className="w-5 h-5 text-foreground/80 group-hover:text-foreground transition-colors" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth="2" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 };
