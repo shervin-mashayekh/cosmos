@@ -475,9 +475,9 @@ const PlanetJourney = () => {
               key={planet.id}
               ref={setSectionRef(index)}
               data-index={index}
-              className={`relative flex w-screen items-center justify-center px-[12vw] ${index === 0 ? 'h-screen' : 'h-[150vh]'}`}
+              className={`relative flex w-screen items-center justify-center px-[12vw] ${index === 0 ? 'h-screen' : 'h-[120vh]'}`}
               style={{ 
-                minHeight: index === 0 ? '100vh' : '150vh',
+                minHeight: index === 0 ? '100vh' : '120vh',
               }}
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
