@@ -198,13 +198,13 @@ const PlanetJourney = () => {
       {/* Dramatic starry space background */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         {/* Deep space gradient with purple/blue tones */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#0a0520] to-[#000000]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000000] via-[#020208] to-[#000000]" />
         
         {/* Galaxy fog effect */}
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/20 blur-[120px] rounded-full" />
-          <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/20 blur-[100px] rounded-full" />
-          <div className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/10 blur-[140px] rounded-full -translate-x-1/2" />
+        <div className="absolute inset-0 opacity-25">
+          <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-purple-900/15 blur-[120px] rounded-full" />
+          <div className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-blue-900/15 blur-[100px] rounded-full" />
+          <div className="absolute top-1/2 left-1/2 w-[1000px] h-[400px] bg-cyan-900/8 blur-[140px] rounded-full -translate-x-1/2" />
         </div>
         
         {/* Multiple star layers for depth */}
@@ -225,8 +225,8 @@ const PlanetJourney = () => {
                   backgroundColor: brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#e0e7ff' : '#ddd6fe',
                   opacity: Math.random() * 0.6 + 0.4,
                   boxShadow: `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`,
-                  animationDelay: shouldAnimate ? Math.random() * 8 + 's' : undefined,
-                  animationDuration: shouldAnimate ? Math.random() * 5 + 4 + 's' : undefined,
+                  animationDelay: shouldAnimate ? Math.random() * 16 + 's' : undefined,
+                  animationDuration: shouldAnimate ? Math.random() * 10 + 8 + 's' : undefined,
                 }}
               />
             );
