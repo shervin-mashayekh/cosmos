@@ -313,20 +313,20 @@ const PlanetJourney = () => {
               className="relative flex h-screen w-screen snap-start items-center justify-center px-[12vw]"
             >
               <div className="relative z-10 flex max-w-5xl items-center justify-center gap-[4vw] animate-fade-in" style={{ animationDelay: '0.3s', animationFillMode: 'both' }}>
-                <div className="relative w-[min(38vw,480px)] h-[min(38vw,480px)]">
+                <div className="relative aspect-square w-[min(38vw,480px)]">
                   <Suspense fallback={
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="text-foreground/50">Loading 3D Planet...</div>
                     </div>
                   }>
-                    <Canvas>
-                      <PerspectiveCamera makeDefault position={[0, 0, 3.5]} />
-                      
-                      {/* Lighting setup */}
-                      <ambientLight intensity={0.4} />
-                      <directionalLight position={[5, 5, 5]} intensity={1} />
-                      <directionalLight position={[-5, -5, -5]} intensity={0.3} />
-                      <pointLight position={[0, 0, 5]} intensity={0.5} color="#8b5cf6" />
+                    <Canvas camera={{ position: [0, 0, 3.5], fov: 50 }}>
+                      {/* Enhanced lighting setup for better glow */}
+                      <ambientLight intensity={0.3} />
+                      <directionalLight position={[5, 5, 5]} intensity={1.2} />
+                      <directionalLight position={[-5, -5, -5]} intensity={0.4} />
+                      <pointLight position={[0, 0, 4]} intensity={0.8} color="#ffffff" />
+                      <pointLight position={[-2, 2, 2]} intensity={0.4} color="#8b5cf6" />
+                      <pointLight position={[2, -2, 2]} intensity={0.4} color="#60a5fa" />
                       
                       {/* Trail effects */}
                       <Planet3DTrail imageUrl={planet.image} progress={progress} trailIndex={2} />
@@ -335,7 +335,7 @@ const PlanetJourney = () => {
                       {/* Main planet */}
                       <Planet3D imageUrl={planet.image} progress={progress} />
                       
-                      {/* Orbit controls for interaction (disabled rotation) */}
+                      {/* Orbit controls for interaction (disabled) */}
                       <OrbitControls 
                         enableZoom={false} 
                         enablePan={false}
