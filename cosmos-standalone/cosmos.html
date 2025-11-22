@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmos - Brand Strategy Tool</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Three.js Loaders -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    :root {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+      --chart-1: 220 70% 50%;
+      --chart-2: 160 60% 45%;
+      --chart-3: 30 80% 55%;
+      --chart-4: 280 65% 60%;
+      --chart-5: 340 75% 55%;
+      --grid-color: 217.2 32.6% 17.5%;
+      --radius: 0.5rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #root {
+      min-height: 100vh;
+    }
+
+    @keyframes accordion-down {
+      from {
+        height: 0;
+        opacity: 0;
+      }
+      to {
+        height: var(--radix-accordion-content-height);
+        opacity: 1;
+      }
+    }
+
+    @keyframes accordion-up {
+      from {
+        height: var(--radix-accordion-content-height);
+        opacity: 1;
+      }
+      to {
+        height: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.3s ease-out;
+    }
+
+    .animate-accordion-down {
+      animation: accordion-down 0.2s ease-out;
+    }
+
+    .animate-accordion-up {
+      animation: accordion-up 0.2s ease-out;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: hsl(var(--background));
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: hsl(var(--muted));
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: hsl(var(--muted-foreground));
+    }
+
+    /* Glass effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // GridBackground Component
+    const GridBackground = () => {
+      const [opacity, setOpacity] = useState(1);
+
+      useEffect(() => {
+        const handleScroll = () => {
+          const heroHeight = window.innerHeight;
+          const scrollPosition = window.scrollY;
+          const fadeStart = heroHeight * 0.6;
+          const fadeEnd = heroHeight;
+          
+          if (scrollPosition <= fadeStart) {
+            setOpacity(1);
+          } else if (scrollPosition >= fadeEnd) {
+            setOpacity(0);
+          } else {
+            const fadeProgress = (scrollPosition - fadeStart) / (fadeEnd - fadeStart);
+            setOpacity(1 - fadeProgress);
+          }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      return (
+        <div 
+          className="fixed inset-0 overflow-hidden pointer-events-none transition-opacity duration-300"
+          style={{ opacity }}
+        >
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'linear-gradient(to right, hsl(var(--grid-color)) 1px, transparent 1px)',
+            backgroundSize: '120px 120px'
+          }} />
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'linear-gradient(to bottom, hsl(var(--grid-color)) 1px, transparent 1px)',
+            backgroundSize: '120px 120px'
+          }} />
+          <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent" style={{
+            background: 'radial-gradient(circle at center, transparent 0%, hsl(var(--background)) 100%)'
+          }} />
+        </div>
+      );
+    };
+
+    // LavaSphere Component
+    const LavaSphere = () => {
+      const groupRef = useRef(null);
+      const sceneRef = useRef(null);
+      const cameraRef = useRef(null);
+      const rendererRef = useRef(null);
+      const modelRef = useRef(null);
+      const mountRef = useRef(null);
+
+      useEffect(() => {
+        if (!mountRef.current) return;
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        sceneRef.current = scene;
+
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          mountRef.current.clientWidth / mountRef.current.clientHeight,
+          0.1,
+          1000
+        );
+        camera.position.set(0, 0, 5);
+        cameraRef.current = camera;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+        renderer.setClearColor(0x000000, 0);
+        mountRef.current.appendChild(renderer.domElement);
+        rendererRef.current = renderer;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // Group for model
+        const group = new THREE.Group();
+        scene.add(group);
+        groupRef.current = group;
+
+        // Point lights for lava effect
+        const pointLight1 = new THREE.PointLight(0xff4500, 2, 10);
+        pointLight1.position.set(0, 0, 0);
+        group.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xff6b00, 1, 8);
+        pointLight2.position.set(3, 3, 3);
+        group.add(pointLight2);
+
+        const pointLight3 = new THREE.PointLight(0xffd700, 1, 8);
+        pointLight3.position.set(-3, -3, -3);
+        group.add(pointLight3);
+
+        // Load MTL and OBJ
+        const mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('./models/');
+        
+        mtlLoader.load('Lava_Planet_2.mtl', (materials) => {
+          materials.preload();
+          
+          const objLoader = new THREE.OBJLoader();
+          objLoader.setMaterials(materials);
+          objLoader.setPath('./models/');
+          
+          objLoader.load('Lava_Planet_2.obj', (object) => {
+            object.scale.set(0.01, 0.01, 0.01);
+            
+            const box = new THREE.Box3().setFromObject(object);
+            const center = box.getCenter(new THREE.Vector3());
+            object.position.sub(center);
+            
+            object.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
+                const material = child.material;
+                if (material.map) {
+                  material.emissive = new THREE.Color(0xff4500);
+                  material.emissiveIntensity = 0.5;
+                  material.shininess = 30;
+                }
+              }
+            });
+            
+            modelRef.current = object;
+            group.add(object);
+          });
+        });
+
+        // Animation
+        let frameId;
+        const clock = new THREE.Clock();
+        const animate = () => {
+          frameId = requestAnimationFrame(animate);
+          
+          const elapsedTime = clock.getElapsedTime();
+          if (groupRef.current) {
+            groupRef.current.rotation.y = elapsedTime * 0.2;
+            groupRef.current.rotation.x = Math.sin(elapsedTime * 0.1) * 0.1;
+          }
+          
+          renderer.render(scene, camera);
+        };
+        animate();
+
+        // Handle resize
+        const handleResize = () => {
+          if (!mountRef.current) return;
+          camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+          window.removeEventListener('resize', handleResize);
+          cancelAnimationFrame(frameId);
+          if (mountRef.current && renderer.domElement) {
+            mountRef.current.removeChild(renderer.domElement);
+          }
+          renderer.dispose();
+        };
+      }, []);
+
+      return <div ref={mountRef} className="absolute inset-0 w-full h-full" />;
+    };
+
+    // Scene3D Component
+    const Scene3D = () => {
+      return (
+        <div className="absolute inset-0 w-full h-full">
+          <LavaSphere />
+        </div>
+      );
+    };
+
+    // Card Component
+    const Card = ({ children, className = '' }) => (
+      <div className={`rounded-lg border bg-card text-card-foreground shadow-sm glass ${className}`}>
+        {children}
+      </div>
+    );
+
+    const CardHeader = ({ children, className = '' }) => (
+      <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>{children}</div>
+    );
+
+    const CardTitle = ({ children, className = '' }) => (
+      <h3 className={`text-2xl font-semibold leading-none tracking-tight ${className}`}>{children}</h3>
+    );
+
+    const CardDescription = ({ children, className = '' }) => (
+      <p className={`text-sm text-muted-foreground ${className}`}>{children}</p>
+    );
+
+    const CardContent = ({ children, className = '' }) => (
+      <div className={`p-6 pt-0 ${className}`}>{children}</div>
+    );
+
+    // Button Component
+    const Button = ({ children, onClick, className = '', variant = 'default', size = 'default' }) => {
+      const variants = {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+      };
+
+      const sizes = {
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        icon: 'h-10 w-10',
+      };
+
+      return (
+        <button
+          onClick={onClick}
+          className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
+        >
+          {children}
+        </button>
+      );
+    };
+
+    // Textarea Component
+    const Textarea = ({ value, onChange, placeholder, className = '' }) => (
+      <textarea
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      />
+    );
+
+    // Accordion Component
+    const Accordion = ({ children }) => {
+      const [openItems, setOpenItems] = useState([]);
+
+      const toggleItem = (value) => {
+        setOpenItems(prev =>
+          prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
+        );
+      };
+
+      return (
+        <div className="space-y-2">
+          {React.Children.map(children, child =>
+            React.cloneElement(child, { openItems, toggleItem })
+          )}
+        </div>
+      );
+    };
+
+    const AccordionItem = ({ value, children, openItems, toggleItem }) => {
+      const isOpen = openItems?.includes(value);
+      
+      return (
+        <div className="border-b border-border">
+          {React.Children.map(children, child =>
+            React.cloneElement(child, { isOpen, value, toggleItem })
+          )}
+        </div>
+      );
+    };
+
+    const AccordionTrigger = ({ children, isOpen, value, toggleItem }) => (
+      <button
+        onClick={() => toggleItem(value)}
+        className="flex flex-1 w-full items-center justify-between py-4 font-medium transition-all hover:underline text-left"
+      >
+        {children}
+        <svg
+          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    );
+
+    const AccordionContent = ({ children, isOpen }) => (
+      <div
+        className={`overflow-hidden text-sm transition-all ${isOpen ? 'animate-accordion-down' : 'animate-accordion-up'}`}
+        style={{ display: isOpen ? 'block' : 'none' }}
+      >
+        <div className="pb-4 pt-0">{children}</div>
+      </div>
+    );
+
+    // Icons
+    const PlusIcon = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    );
+
+    const XIcon = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    );
+
+    // Main App Component
+    const App = () => {
+      const [conflict, setConflict] = useState('');
+      const [submittedConflict, setSubmittedConflict] = useState('');
+      const [homelandReplies, setHomelandReplies] = useState({});
+      const [hierarchyReplies, setHierarchyReplies] = useState({});
+      const [habitatReplies, setHabitatReplies] = useState({});
+
+      const handleSubmitConflict = () => {
+        setSubmittedConflict(conflict);
+      };
+
+      const addReply = (section, questionId) => {
+        const setReplies = section === 'homeland' ? setHomelandReplies : section === 'hierarchy' ? setHierarchyReplies : setHabitatReplies;
+        setReplies(prev => ({
+          ...prev,
+          [questionId]: [...(prev[questionId] || []), '']
+        }));
+      };
+
+      const removeReply = (section, questionId, index) => {
+        const setReplies = section === 'homeland' ? setHomelandReplies : section === 'hierarchy' ? setHierarchyReplies : setHabitatReplies;
+        setReplies(prev => ({
+          ...prev,
+          [questionId]: prev[questionId].filter((_, i) => i !== index)
+        }));
+      };
+
+      const updateReply = (section, questionId, index, value) => {
+        const setReplies = section === 'homeland' ? setHomelandReplies : section === 'hierarchy' ? setHierarchyReplies : setHabitatReplies;
+        setReplies(prev => ({
+          ...prev,
+          [questionId]: prev[questionId].map((reply, i) => i === index ? value : reply)
+        }));
+      };
+
+      const homelandQuestions = [
+        { id: 'h1', text: 'Where does your protagonist come from?' },
+        { id: 'h2', text: 'What values define their homeland?' },
+        { id: 'h3', text: 'What traditions shape their identity?' },
+        { id: 'h4', text: 'What stories do they tell themselves?' },
+        { id: 'h5', text: 'What symbols represent their origins?' },
+        { id: 'h6', text: 'What rituals connect them to their past?' },
+        { id: 'h7', text: 'What language do they speak?' },
+        { id: 'h8', text: 'What artifacts carry their history?' },
+        { id: 'h9', text: 'What landscapes define their world?' },
+        { id: 'h10', text: 'What conflicts shaped their formation?' },
+        { id: 'h11', text: 'What allies do they naturally trust?' },
+        { id: 'h12', text: 'What enemies do they inherently oppose?' },
+        { id: 'h13', text: 'What dreams drive them forward?' },
+        { id: 'h14', text: 'What fears hold them back?' },
+        { id: 'h15', text: 'What makes them feel at home?' }
+      ];
+
+      const hierarchyQuestions = [
+        { id: 'hi1', text: 'What power structures govern your protagonist?' },
+        { id: 'hi2', text: 'Who holds authority in their world?' },
+        { id: 'hi3', text: 'What rules must they follow?' },
+        { id: 'hi4', text: 'What roles are they expected to play?' },
+        { id: 'hi5', text: 'What institutions shape their choices?' },
+        { id: 'hi6', text: 'What systems do they navigate?' },
+        { id: 'hi7', text: 'What gatekeepers control access?' },
+        { id: 'hi8', text: 'What networks determine success?' },
+        { id: 'hi9', text: 'What hierarchies do they challenge?' }
+      ];
+
+      const habitatQuestions = [
+        { id: 'ha1', text: 'Where does your protagonist live?' },
+        { id: 'ha2', text: 'What environment surrounds them?' },
+        { id: 'ha3', text: 'What spaces do they occupy?' },
+        { id: 'ha4', text: 'What physical constraints do they face?' },
+        { id: 'ha5', text: 'What resources are available?' },
+        { id: 'ha6', text: 'What dangers threaten them?' },
+        { id: 'ha7', text: 'What comfort do they seek?' },
+        { id: 'ha8', text: 'What boundaries define their territory?' },
+        { id: 'ha9', text: 'What climate shapes their behavior?' },
+        { id: 'ha10', text: 'What infrastructure supports them?' },
+        { id: 'ha11', text: 'What neighbors do they interact with?' },
+        { id: 'ha12', text: 'What shelter protects them?' },
+        { id: 'ha13', text: 'What journeys must they make?' }
+      ];
+
+      return (
+        <div className="min-h-screen relative">
+          <GridBackground />
+          
+          {/* Hero Section */}
+          <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <Scene3D />
+            <div className="relative z-10 text-center px-4 max-w-4xl mx-auto animate-fade-in">
+              <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                Build Your Cosmos
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-300 mb-8">
+                Define your brand's universe through conflict, culture, and values
+              </p>
+            </div>
+          </section>
+
+          {/* Core Concepts Section */}
+          <section className="relative py-20 px-4">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+                Understand The Core Concepts
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <Card className="animate-fade-in">
+                  <CardHeader>
+                    <CardTitle>Protagonist</CardTitle>
+                    <CardDescription>The hero of your brand story</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Your target audience, customer, or the person your brand serves. They are on a journey.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                  <CardHeader>
+                    <CardTitle>Antagonist</CardTitle>
+                    <CardDescription>The opposing force</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      The problem, challenge, or friction your protagonist faces. What stands in their way?
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                  <CardHeader>
+                    <CardTitle>Magic</CardTitle>
+                    <CardDescription>Your unique solution</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Your product, service, or methodology that helps the protagonist overcome the antagonist.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                  <CardHeader>
+                    <CardTitle>Society</CardTitle>
+                    <CardDescription>The broader context</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      The world, culture, and systems that surround your protagonist's journey.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                  <CardHeader>
+                    <CardTitle>Value Definition</CardTitle>
+                    <CardDescription>What success looks like</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      The transformation, outcome, or benefit the protagonist achieves through your magic.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </section>
+
+          {/* Build Your Cosmos Section */}
+          <section className="relative py-20 px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+                Start Building Your Cosmos
+              </h2>
+
+              {/* Conflict Input */}
+              <Card className="mb-12 glass">
+                <CardHeader>
+                  <CardTitle>Add The Conflict</CardTitle>
+                  <CardDescription>
+                    What is the core tension or problem your brand addresses?
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Textarea
+                    placeholder="Describe the conflict your protagonist faces..."
+                    value={conflict}
+                    onChange={(e) => setConflict(e.target.value)}
+                    className="min-h-[120px]"
+                  />
+                  <Button onClick={handleSubmitConflict}>
+                    Submit Conflict
+                  </Button>
+                  {submittedConflict && (
+                    <div className="mt-4 p-4 glass rounded-lg">
+                      <h4 className="font-semibold mb-2">Your Conflict:</h4>
+                      <p className="text-sm text-muted-foreground">{submittedConflict}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Questions Accordion */}
+              <div className="space-y-8">
+                <Accordion>
+                  {/* Homeland Section */}
+                  <AccordionItem value="homeland">
+                    <AccordionTrigger>
+                      <span className="text-2xl font-semibold">Homeland (Origins & Identity)</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-6">
+                        {homelandQuestions.map((q, idx) => (
+                          <div key={q.id} className="space-y-3">
+                            <h4 className="font-medium">{idx + 1}. {q.text}</h4>
+                            {(homelandReplies[q.id] || []).map((reply, replyIdx) => (
+                              <div key={replyIdx} className="flex gap-2">
+                                <Textarea
+                                  value={reply}
+                                  onChange={(e) => updateReply('homeland', q.id, replyIdx, e.target.value)}
+                                  placeholder="Your answer..."
+                                />
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeReply('homeland', q.id, replyIdx)}
+                                >
+                                  <XIcon />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addReply('homeland', q.id)}
+                            >
+                              <PlusIcon /> Add Reply
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Hierarchy Section */}
+                  <AccordionItem value="hierarchy">
+                    <AccordionTrigger>
+                      <span className="text-2xl font-semibold">Hierarchy (Power & Structure)</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-6">
+                        {hierarchyQuestions.map((q, idx) => (
+                          <div key={q.id} className="space-y-3">
+                            <h4 className="font-medium">{idx + 1}. {q.text}</h4>
+                            {(hierarchyReplies[q.id] || []).map((reply, replyIdx) => (
+                              <div key={replyIdx} className="flex gap-2">
+                                <Textarea
+                                  value={reply}
+                                  onChange={(e) => updateReply('hierarchy', q.id, replyIdx, e.target.value)}
+                                  placeholder="Your answer..."
+                                />
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeReply('hierarchy', q.id, replyIdx)}
+                                >
+                                  <XIcon />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addReply('hierarchy', q.id)}
+                            >
+                              <PlusIcon /> Add Reply
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Habitat Section */}
+                  <AccordionItem value="habitat">
+                    <AccordionTrigger>
+                      <span className="text-2xl font-semibold">Habitat (Environment & Space)</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-6">
+                        {habitatQuestions.map((q, idx) => (
+                          <div key={q.id} className="space-y-3">
+                            <h4 className="font-medium">{idx + 1}. {q.text}</h4>
+                            {(habitatReplies[q.id] || []).map((reply, replyIdx) => (
+                              <div key={replyIdx} className="flex gap-2">
+                                <Textarea
+                                  value={reply}
+                                  onChange={(e) => updateReply('habitat', q.id, replyIdx, e.target.value)}
+                                  placeholder="Your answer..."
+                                />
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeReply('habitat', q.id, replyIdx)}
+                                >
+                                  <XIcon />
+                                </Button>
+                              </div>
+                            ))}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addReply('habitat', q.id)}
+                            >
+                              <PlusIcon /> Add Reply
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                {/* Generate Button */}
+                <div className="flex justify-center pt-8">
+                  <Button className="text-lg px-8 py-6">
+                    Generate Thematic Analysis
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      );
+    };
+
+    // Render App
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
