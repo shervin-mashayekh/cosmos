@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Plus, X, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Theme {
   title: string;
@@ -32,6 +33,7 @@ interface AnalysisResult {
 
 const AIPowered = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [conflict, setConflict] = useState("Ordinary Limitations vs. Extraordinary Possibilities");
   const [submittedConflict, setSubmittedConflict] = useState("Ordinary Limitations vs. Extraordinary Possibilities");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -252,13 +254,13 @@ const AIPowered = () => {
       setAnalysisResult(data);
       toast({
         title: "Analysis Complete",
-        description: "Your cosmos thematic analysis has been generated!",
+        description: "Redirecting to your cosmic journey...",
       });
 
-      // Scroll to results
+      // Navigate to Planet Journey with the analysis data
       setTimeout(() => {
-        document.getElementById('analysis-results')?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+        navigate('/', { state: { analysisResult: data, conflict } });
+      }, 1500);
 
     } catch (error: any) {
       console.error('Analysis error:', error);
