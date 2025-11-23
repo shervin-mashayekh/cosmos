@@ -125,7 +125,22 @@ const PlanetJourney = () => {
   const [planets, setPlanets] = useState<Planet[]>(defaultPlanets);
   const [scrollProgress, setScrollProgress] = useState<number[]>(Array(planets.length).fill(0));
   const [globalScrollProgress, setGlobalScrollProgress] = useState(0);
+  const [rotations, setRotations] = useState<number[]>(new Array(planets.length).fill(0));
   
+  // Continuous rotation animation
+  useEffect(() => {
+    let animationFrameId: number;
+    const rotationSpeed = 0.225; // 360 degrees / 40 seconds / 60 fps = 0.15 deg/frame
+    
+    const animate = () => {
+      setRotations(prev => prev.map(r => (r + rotationSpeed) % 360));
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
   // Memoize star positions with depth layers for parallax
   const starLayers = useRef({
     far: [...Array(150)].map(() => ({
@@ -564,12 +579,11 @@ const PlanetJourney = () => {
                     aria-hidden="true"
                     className="absolute inset-0 w-[min(38vw,480px)] origin-center transition-none"
                     style={{ 
-                      clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${trail2TranslateX}%) scale(${trail2Scale})`,
+                      transform: `translateX(${trail2TranslateX}%) scale(${trail2Scale}) rotate(${rotations[index]}deg)`,
                       opacity: trail2Opacity,
                       filter: progress > 0.5 
-                        ? `blur(2px) drop-shadow(0 0 40px ${planetGlowColors[index]})`
-                        : 'blur(2px) drop-shadow(0 0 30px rgba(0,0,0,0.9))'
+                        ? `blur(2px) drop-shadow(0 0 30px rgba(255,255,255,0.6)) drop-shadow(0 0 60px ${planetGlowColors[index]}) drop-shadow(0 0 100px ${planetGlowColors[index].replace('0.7', '0.3')})`
+                        : 'blur(2px) drop-shadow(0 0 20px rgba(0,0,0,0.8))'
                     }}
                   />
                   <img
@@ -578,12 +592,11 @@ const PlanetJourney = () => {
                     aria-hidden="true"
                     className="absolute inset-0 w-[min(38vw,480px)] origin-center transition-none"
                     style={{ 
-                      clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${trail1TranslateX}%) scale(${trail1Scale})`,
+                      transform: `translateX(${trail1TranslateX}%) scale(${trail1Scale}) rotate(${rotations[index]}deg)`,
                       opacity: trail1Opacity,
                       filter: progress > 0.5 
-                        ? `blur(4px) drop-shadow(0 0 50px ${planetGlowColors[index]})`
-                        : 'blur(4px) drop-shadow(0 0 30px rgba(0,0,0,0.9))'
+                        ? `blur(4px) drop-shadow(0 0 40px rgba(255,255,255,0.5)) drop-shadow(0 0 80px ${planetGlowColors[index]}) drop-shadow(0 0 120px ${planetGlowColors[index].replace('0.7', '0.25')})`
+                        : 'blur(4px) drop-shadow(0 0 20px rgba(0,0,0,0.8))'
                     }}
                   />
                   
@@ -591,15 +604,14 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className="relative w-[min(38vw,480px)] origin-center animate-[spin_40s_linear_infinite]"
+                    className="relative w-[min(38vw,480px)] origin-center"
                     style={{ 
-                      clipPath: 'inset(12% 12% 12% 12%)',
-                      transform: `translateX(${translateX}%) scale(${scale})`,
+                      transform: `translateX(${translateX}%) scale(${scale}) rotate(${rotations[index]}deg)`,
                       opacity: progress > 0.15 ? 1 : 0,
                       transition: 'opacity 0.8s ease-out, filter 0.9s ease-out',
                       filter: progress > 0.5 
-                        ? `blur(${blur}px) drop-shadow(0 0 26px rgba(255,255,255,0.9)) drop-shadow(0 0 80px ${planetGlowColors[index]})`
-                        : `blur(${blur}px) drop-shadow(0 0 20px rgba(0,0,0,0.9))`
+                        ? `blur(${blur}px) drop-shadow(0 0 20px rgba(255,255,255,1)) drop-shadow(0 0 50px rgba(255,255,255,0.8)) drop-shadow(0 0 100px ${planetGlowColors[index]}) drop-shadow(0 0 150px ${planetGlowColors[index].replace('0.7', '0.4')})`
+                        : `blur(${blur}px) drop-shadow(0 0 15px rgba(0,0,0,0.8))`
                     }}
                   />
                 </div>
