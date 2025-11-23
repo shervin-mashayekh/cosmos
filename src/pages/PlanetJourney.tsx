@@ -103,6 +103,19 @@ const defaultPlanets: Planet[] = [
   },
 ];
 
+// Custom glow colors for each planet
+const planetGlowColors = [
+  'rgba(255, 100, 150, 0.7)', // Planet 1 - Pink glow
+  'rgba(100, 150, 255, 0.7)', // Planet 2 - Blue glow
+  'rgba(150, 255, 200, 0.7)', // Planet 3 - Cyan/green glow
+  'rgba(255, 200, 100, 0.7)', // Planet 4 - Orange glow
+  'rgba(200, 100, 255, 0.7)', // Planet 5 - Purple glow
+  'rgba(255, 150, 150, 0.7)', // Planet 6 - Red glow
+  'rgba(100, 200, 255, 0.7)', // Planet 7 - Light blue glow
+  'rgba(255, 100, 255, 0.7)', // Planet 8 - Magenta glow
+  'rgba(150, 150, 255, 0.7)', // Planet 9 - Violet glow
+];
+
 const PlanetJourney = () => {
   const location = useLocation();
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -549,24 +562,28 @@ const PlanetJourney = () => {
                     src={planet.image}
                     alt=""
                     aria-hidden="true"
-                    className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
+                    className="absolute inset-0 w-[min(38vw,480px)] origin-center transition-none"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
                       transform: `translateX(${trail2TranslateX}%) scale(${trail2Scale})`,
                       opacity: trail2Opacity,
-                      filter: 'blur(2px)'
+                      filter: progress > 0.5 
+                        ? `blur(2px) drop-shadow(0 0 40px ${planetGlowColors[index]})`
+                        : 'blur(2px) drop-shadow(0 0 30px rgba(0,0,0,0.9))'
                     }}
                   />
                   <img
                     src={planet.image}
                     alt=""
                     aria-hidden="true"
-                    className="absolute inset-0 w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center transition-none"
+                    className="absolute inset-0 w-[min(38vw,480px)] origin-center transition-none"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
                       transform: `translateX(${trail1TranslateX}%) scale(${trail1Scale})`,
                       opacity: trail1Opacity,
-                      filter: 'blur(4px)'
+                      filter: progress > 0.5 
+                        ? `blur(4px) drop-shadow(0 0 50px ${planetGlowColors[index]})`
+                        : 'blur(4px) drop-shadow(0 0 30px rgba(0,0,0,0.9))'
                     }}
                   />
                   
@@ -574,13 +591,15 @@ const PlanetJourney = () => {
                   <img
                     src={planet.image}
                     alt={planet.title}
-                    className="relative w-[min(38vw,480px)] drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] origin-center animate-[spin_40s_linear_infinite]"
+                    className="relative w-[min(38vw,480px)] origin-center animate-[spin_40s_linear_infinite]"
                     style={{ 
                       clipPath: 'inset(12% 12% 12% 12%)',
                       transform: `translateX(${translateX}%) scale(${scale})`,
                       opacity: progress > 0.15 ? 1 : 0,
-                      transition: 'opacity 0.8s ease-out',
-                      filter: `blur(${blur}px)`
+                      transition: 'opacity 0.8s ease-out, filter 0.9s ease-out',
+                      filter: progress > 0.5 
+                        ? `blur(${blur}px) drop-shadow(0 0 26px rgba(255,255,255,0.9)) drop-shadow(0 0 80px ${planetGlowColors[index]})`
+                        : `blur(${blur}px) drop-shadow(0 0 20px rgba(0,0,0,0.9))`
                     }}
                   />
                 </div>
