@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import planet1 from "@/assets/planet-1.png";
 import planet2 from "@/assets/planet-2.png";
 import planet3 from "@/assets/planet-3.png";
@@ -18,7 +19,7 @@ interface Planet {
   image: string;
 }
 
-const planets: Planet[] = [
+const defaultPlanets: Planet[] = [
   {
     id: 1,
     label: "Homeland - Core Belief",
@@ -103,10 +104,12 @@ const planets: Planet[] = [
 ];
 
 const PlanetJourney = () => {
+  const location = useLocation();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevActiveIndex, setPrevActiveIndex] = useState(0);
+  const [planets, setPlanets] = useState<Planet[]>(defaultPlanets);
   const [scrollProgress, setScrollProgress] = useState<number[]>(Array(planets.length).fill(0));
   const [globalScrollProgress, setGlobalScrollProgress] = useState(0);
   
@@ -131,6 +134,65 @@ const PlanetJourney = () => {
       left: Math.random() * 100,
     })),
   }).current;
+
+  // Load AI analysis results if navigated from AI-Powered page
+  useEffect(() => {
+    const state = location.state as { analysisResult?: any; conflict?: string } | null;
+    if (state?.analysisResult) {
+      const { analysisResult } = state;
+      const updatedPlanets = [...defaultPlanets];
+      
+      // Map Homeland themes (planets 1-3)
+      const homelandCategory = analysisResult.category_themes?.find(
+        (cat: any) => cat.category_name === 'Homeland'
+      );
+      if (homelandCategory?.themes) {
+        homelandCategory.themes.slice(0, 3).forEach((theme: any, idx: number) => {
+          if (updatedPlanets[idx]) {
+            updatedPlanets[idx] = {
+              ...updatedPlanets[idx],
+              title: theme.title || updatedPlanets[idx].title,
+              body: theme.analysis || updatedPlanets[idx].body,
+            };
+          }
+        });
+      }
+      
+      // Map Hierarchy themes (planets 4-6)
+      const hierarchyCategory = analysisResult.category_themes?.find(
+        (cat: any) => cat.category_name === 'Hierarchy'
+      );
+      if (hierarchyCategory?.themes) {
+        hierarchyCategory.themes.slice(0, 3).forEach((theme: any, idx: number) => {
+          if (updatedPlanets[idx + 3]) {
+            updatedPlanets[idx + 3] = {
+              ...updatedPlanets[idx + 3],
+              title: theme.title || updatedPlanets[idx + 3].title,
+              body: theme.analysis || updatedPlanets[idx + 3].body,
+            };
+          }
+        });
+      }
+      
+      // Map Habitat themes (planets 7-9)
+      const habitatCategory = analysisResult.category_themes?.find(
+        (cat: any) => cat.category_name === 'Habitat'
+      );
+      if (habitatCategory?.themes) {
+        habitatCategory.themes.slice(0, 3).forEach((theme: any, idx: number) => {
+          if (updatedPlanets[idx + 6]) {
+            updatedPlanets[idx + 6] = {
+              ...updatedPlanets[idx + 6],
+              title: theme.title || updatedPlanets[idx + 6].title,
+              body: theme.analysis || updatedPlanets[idx + 6].body,
+            };
+          }
+        });
+      }
+      
+      setPlanets(updatedPlanets);
+    }
+  }, [location.state]);
 
   // Basic SEO for this landing page
   useEffect(() => {
